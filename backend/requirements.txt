@@ -1,0 +1,11 @@
+fastapi>=0.115.0,<1.0.0
+uvicorn[standard]>=0.32.0,<1.0.0
+sqlalchemy==2.0.36
+pydantic>=2.10.0,<3.0.0
+pydantic-settings>=2.6.0,<3.0.0
+alembic>=1.14.0,<2.0.0
+scikit-learn>=1.5.0,<2.0.0
+pandas>=2.2.0,<3.0.0
+numpy>=1.26.0,<3.0.0
+joblib>=1.4.0,<2.0.0
+psycopg[binary]>=3.2.0,<4.0.0

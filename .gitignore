@@ -1,0 +1,32 @@
+# secrets and local config
+.env
+.env.local
+*.db
+*.sqlite3
+
+# python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# generated ML data and artifacts
+backend/ml/data/
+backend/ml/artifacts/*
+!backend/ml/artifacts/.gitkeep
+
+# node
+node_modules/
+dist/
+coverage/
+playwright-report/
+test-results/
+
+# editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

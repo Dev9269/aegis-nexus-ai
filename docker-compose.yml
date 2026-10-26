@@ -1,0 +1,77 @@
+name: aegis-nexus-ai
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-aegis}
+      POSTGRES_USER: ${POSTGRES_USER:-aegis}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+    volumes:
+      - aegis_db:/var/lib/postgresql/data
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-aegis} -d ${POSTGRES_DB:-aegis}"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    environment:
+      AEGIS_ENVIRONMENT: ${AEGIS_ENVIRONMENT:-production}
+      AEGIS_DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-aegis}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-aegis}
+      AEGIS_ALLOWED_ORIGINS: ${AEGIS_ALLOWED_ORIGINS:-http://localhost:8080,http://127.0.0.1:8080}
+      AEGIS_DEMO_MODE: ${AEGIS_DEMO_MODE:-false}
+      AEGIS_DEMO_PASSWORD: ${AEGIS_DEMO_PASSWORD:-}
+      AEGIS_BOOTSTRAP_ADMIN_EMAIL: ${AEGIS_BOOTSTRAP_ADMIN_EMAIL:-}
+      AEGIS_BOOTSTRAP_ADMIN_PASSWORD: ${AEGIS_BOOTSTRAP_ADMIN_PASSWORD:-}
+      AEGIS_BOOTSTRAP_ADMIN_NAME: ${AEGIS_BOOTSTRAP_ADMIN_NAME:-Bootstrap Admin}
+      AEGIS_SESSION_TTL_MINUTES: ${AEGIS_SESSION_TTL_MINUTES:-60}
+      AEGIS_COOKIE_SECURE: ${AEGIS_COOKIE_SECURE:-true}
+      AEGIS_AUTO_CREATE_TABLES: "false"
+      AEGIS_WS_REVALIDATION_SECONDS: ${AEGIS_WS_REVALIDATION_SECONDS:-15}
+      AEGIS_MODEL_ARTIFACT_DIR: /app/ml/artifacts
+    volumes:
+      - aegis_models:/app/ml/artifacts
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:8000:8000"
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+      args:
+        VITE_API_BASE: /api
+        VITE_WS_PATH: /api/ws/events
+        VITE_DEMO_MODE: "false"
+        VITE_DEMO_PASSWORD: ""
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:8080:8080"
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    restart: unless-stopped
+
+volumes:
+  aegis_db:
+  aegis_models:

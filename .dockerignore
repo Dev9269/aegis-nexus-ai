@@ -1,0 +1,17 @@
+.git
+.gitignore
+.env
+**/.venv
+**/__pycache__
+**/*.pyc
+**/.pytest_cache
+**/*.db
+**/*.sqlite3
+frontend/node_modules
+frontend/dist
+frontend/coverage
+frontend/playwright-report
+frontend/test-results
+backend/ml/artifacts/*
+!backend/ml/artifacts/.gitkeep
+docs
