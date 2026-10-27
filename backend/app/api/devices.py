@@ -7,17 +7,18 @@ from sqlalchemy import func, or_, select
 from sqlalchemy.orm import Session
 
 from app.api.deps import AuthContext, require_roles
+from app.api.schemas import Page
 from app.audit.service import append_audit
 from app.core.database import get_db
 from app.core.errors import ApiError
+from app.core.pagination import page_offset, page_response
+from app.core.roles import ADMIN_ROLES, STAFF_ROLES
 from app.models import Device, EnrollmentStatus, Identity, Severity, new_id, utcnow
-from app.schemas import DeviceEnrollIn, DeviceOut, DeviceStateIn, Page
+from app.schemas import DeviceEnrollIn, DeviceOut, DeviceStateIn
 from app.serializers import device_out
 from app.services.events import record_event
 
 router = APIRouter(prefix="/devices", tags=["devices"])
-Staff = Depends(require_roles("SECURITY_ADMIN", "SECURITY_ANALYST", "AUDITOR"))
-Admin = Depends(require_roles("SECURITY_ADMIN"))
 
 
 @router.get("", response_model=Page[DeviceOut])
@@ -27,7 +28,7 @@ def list_devices(
     identity_id: str | None = Query(default=None, max_length=36),
     page: int = Query(default=1, ge=1, le=10000),
     page_size: int = Query(default=20, ge=1, le=100),
-    auth: AuthContext = Depends(require_roles("SECURITY_ADMIN", "SECURITY_ANALYST", "AUDITOR")),
+    auth: AuthContext = Depends(require_roles(*STAFF_ROLES)),
     db: Session = Depends(get_db),
 ) -> Page[DeviceOut]:
     query = select(Device)
@@ -53,12 +54,12 @@ def list_devices(
     devices = list(
         db.scalars(
             query.order_by(Device.enrolled_at.desc())
-            .offset((page - 1) * page_size)
+            .offset(page_offset(page, page_size))
             .limit(page_size)
         )
     )
-    return Page(
-        items=[device_out(device) for device in devices],
+    return page_response(
+        [device_out(device) for device in devices],
         total=total,
         page=page,
         page_size=page_size,
@@ -68,7 +69,7 @@ def list_devices(
 @router.post("", response_model=DeviceOut, status_code=201)
 def enroll_device(
     payload: DeviceEnrollIn,
-    auth: AuthContext = Depends(require_roles("SECURITY_ADMIN")),
+    auth: AuthContext = Depends(require_roles(*ADMIN_ROLES)),
     db: Session = Depends(get_db),
 ) -> DeviceOut:
     identity = db.get(Identity, payload.identity_id)
@@ -126,7 +127,7 @@ def enroll_device(
 def update_device_state(
     device_id: str,
     payload: DeviceStateIn,
-    auth: AuthContext = Depends(require_roles("SECURITY_ADMIN")),
+    auth: AuthContext = Depends(require_roles(*ADMIN_ROLES)),
     db: Session = Depends(get_db),
 ) -> DeviceOut:
     device = db.get(Device, device_id)

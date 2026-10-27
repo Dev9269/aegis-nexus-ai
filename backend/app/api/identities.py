@@ -7,8 +7,11 @@ from sqlalchemy import func, or_, select
 from sqlalchemy.orm import Session
 
 from app.api.deps import AuthContext, get_auth_context, require_roles
+from app.api.schemas import Page
 from app.core.database import get_db
 from app.core.errors import ApiError
+from app.core.pagination import page_offset, page_response
+from app.core.roles import STAFF_ROLES
 from app.models import (
     AccessRequest,
     AuditLog,
@@ -18,7 +21,7 @@ from app.models import (
     SecurityEvent,
     UserSession,
 )
-from app.schemas import IdentityDetail, IdentitySummary, Page, RiskPoint
+from app.schemas import IdentityDetail, IdentitySummary, RiskPoint
 from app.security.sessions import active_session_count
 from app.serializers import (
     access_out,
@@ -38,7 +41,7 @@ def list_identities(
     status: Literal["ACTIVE", "DISABLED"] | None = Query(default=None),
     page: int = Query(default=1, ge=1, le=10000),
     page_size: int = Query(default=20, ge=1, le=100),
-    auth: AuthContext = Depends(require_roles("SECURITY_ADMIN", "SECURITY_ANALYST", "AUDITOR")),
+    auth: AuthContext = Depends(require_roles(*STAFF_ROLES)),
     db: Session = Depends(get_db),
 ) -> Page[IdentitySummary]:
     query = select(Identity)
@@ -65,12 +68,12 @@ def list_identities(
     identities = list(
         db.scalars(
             query.order_by(Identity.current_risk.desc(), Identity.display_name.asc())
-            .offset((page - 1) * page_size)
+            .offset(page_offset(page, page_size))
             .limit(page_size)
         )
     )
-    return Page(
-        items=[identity_summary(identity) for identity in identities],
+    return page_response(
+        [identity_summary(identity) for identity in identities],
         total=total,
         page=page,
         page_size=page_size,
@@ -86,7 +89,7 @@ def get_identity(
     identity = db.get(Identity, identity_id)
     if identity is None:
         raise ApiError(404, "IDENTITY_NOT_FOUND", "Identity not found.")
-    is_staff = auth.identity.role in {"SECURITY_ADMIN", "SECURITY_ANALYST", "AUDITOR"}
+    is_staff = auth.identity.role in STAFF_ROLES
     if not is_staff and auth.identity.id != identity.id:
         raise ApiError(403, "FORBIDDEN", "You may only view your own identity.")
 

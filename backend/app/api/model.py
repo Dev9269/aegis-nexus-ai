@@ -9,6 +9,7 @@ from app.api.deps import AuthContext, require_roles
 from app.audit.service import append_audit
 from app.core.database import get_db
 from app.core.errors import ApiError
+from app.core.roles import ADMIN_ROLES, STAFF_ROLES
 from app.ml.runtime import (
     feature_metadata,
     get_evaluation,
@@ -25,7 +26,6 @@ from app.schemas import (
 from app.services.events import record_event
 
 router = APIRouter(prefix="/model", tags=["model"])
-STAFF_ROLES = ("SECURITY_ADMIN", "SECURITY_ANALYST", "AUDITOR")
 
 
 def _evaluation_payload() -> ModelEvaluationOut:
@@ -77,7 +77,7 @@ def model_features(
 def retrain_model(
     seed: int = Query(default=42, ge=1, le=100000),
     rows: int = Query(default=5000, ge=1000, le=50000),
-    auth: AuthContext = Depends(require_roles("SECURITY_ADMIN")),
+    auth: AuthContext = Depends(require_roles(*ADMIN_ROLES)),
     db: Session = Depends(get_db),
 ) -> ModelEvaluationOut:
     result = retrain(seed=seed, rows=rows)

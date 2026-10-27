@@ -7,9 +7,12 @@ from sqlalchemy import func, or_, select
 from sqlalchemy.orm import Session
 
 from app.api.deps import AuthContext, require_roles
+from app.api.schemas import Page
 from app.audit.service import append_audit
 from app.core.database import get_db
 from app.core.errors import ApiError
+from app.core.pagination import page_offset, page_response
+from app.core.roles import STAFF_ROLES, WRITE_ROLES
 from app.models import (
     AccessRequest,
     Identity,
@@ -25,14 +28,11 @@ from app.schemas import (
     IncidentNoteOut,
     IncidentOut,
     IncidentUpdateIn,
-    Page,
 )
 from app.serializers import access_out, event_out, incident_out
 from app.services.events import record_event
 
 router = APIRouter(prefix="/incidents", tags=["incidents"])
-STAFF_ROLES = ("SECURITY_ADMIN", "SECURITY_ANALYST", "AUDITOR")
-WRITE_ROLES = ("SECURITY_ADMIN", "SECURITY_ANALYST")
 StatusLiteral = Literal["OPEN", "INVESTIGATING", "CONTAINED", "RESOLVED", "FALSE_POSITIVE"]
 SeverityLiteral = Literal["LOW", "MEDIUM", "HIGH", "CRITICAL"]
 
@@ -120,10 +120,10 @@ def list_incidents(
         count_query = count_query.where(*filters)
     total = int(db.scalar(count_query) or 0)
     rows = list(
-        db.scalars(query.offset((page - 1) * page_size).limit(page_size))
+        db.scalars(query.offset(page_offset(page, page_size)).limit(page_size))
     )
-    return Page(
-        items=[incident_out(row) for row in rows],
+    return page_response(
+        [incident_out(row) for row in rows],
         total=total,
         page=page,
         page_size=page_size,

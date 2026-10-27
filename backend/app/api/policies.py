@@ -10,6 +10,7 @@ from app.api.deps import AuthContext, require_roles
 from app.audit.service import append_audit
 from app.core.database import get_db
 from app.core.errors import ApiError
+from app.core.roles import ADMIN_ROLES, STAFF_ROLES, WRITE_ROLES
 from app.models import AccessPolicy, Resource, new_id
 from app.policies.engine import evaluate_policy
 from app.schemas import (
@@ -23,7 +24,6 @@ from app.schemas import (
 from app.services.events import record_event
 
 router = APIRouter(tags=["policies"])
-STAFF_ROLES = ("SECURITY_ADMIN", "SECURITY_ANALYST", "AUDITOR")
 
 
 def _active_policy(db: Session, resource_id: str) -> AccessPolicy | None:
@@ -114,7 +114,7 @@ def get_policy_history(
 def update_policy(
     resource_id: str,
     payload: PolicyUpdateIn,
-    auth: AuthContext = Depends(require_roles("SECURITY_ADMIN")),
+    auth: AuthContext = Depends(require_roles(*ADMIN_ROLES)),
     db: Session = Depends(get_db),
 ) -> PolicyOut:
     resource = db.get(Resource, resource_id)
@@ -197,7 +197,7 @@ def update_policy(
 @router.post("/policies/preview", response_model=PolicyPreviewOut)
 def preview_policy(
     payload: PolicyPreviewIn,
-    auth: AuthContext = Depends(require_roles("SECURITY_ADMIN", "SECURITY_ANALYST")),
+    auth: AuthContext = Depends(require_roles(*WRITE_ROLES)),
 ) -> PolicyPreviewOut:
     results: list[PolicyPreviewResult] = []
     for index, case in enumerate(payload.cases):

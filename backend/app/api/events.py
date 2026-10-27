@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import asyncio
-from datetime import datetime, timezone
 from typing import Literal
 
 from fastapi import APIRouter, Depends, Query, WebSocket, WebSocketDisconnect
@@ -9,17 +8,20 @@ from sqlalchemy import func, or_, select
 from sqlalchemy.orm import Session
 
 from app.api.deps import AuthContext, require_roles
+from app.api.schemas import Page
 from app.core.config import get_settings
 from app.core.database import SessionLocal, get_db
 from app.core.errors import ApiError
+from app.core.pagination import page_offset, page_response
+from app.core.roles import STAFF_ROLES
+from app.core.time import parse_optional_utc
 from app.models import Identity, SecurityEvent
 from app.realtime import realtime
-from app.schemas import NotificationOut, Page, SecurityEventOut
+from app.schemas import NotificationOut, SecurityEventOut
 from app.security.sessions import SESSION_COOKIE, resolve_session
 from app.serializers import event_out
 
 router = APIRouter(tags=["events"])
-STAFF_ROLES = ("SECURITY_ADMIN", "SECURITY_ANALYST", "AUDITOR")
 _SEVERITIES = ("LOW", "MEDIUM", "HIGH", "CRITICAL")
 settings = get_settings()
 
@@ -40,18 +42,6 @@ async def _close_if_unauthorized(websocket: WebSocket, raw_token: str | None) ->
         return False
     await websocket.close(code=4401)
     return True
-
-
-def _parse_time(value: str | None, field: str) -> datetime | None:
-    if not value:
-        return None
-    try:
-        parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
-    except ValueError as exc:
-        raise ApiError(422, "INVALID_TIME_FILTER", f"{field} must be an ISO 8601 timestamp.") from exc
-    if parsed.tzinfo is None:
-        parsed = parsed.replace(tzinfo=timezone.utc)
-    return parsed.astimezone(timezone.utc)
 
 
 @router.get("/events", response_model=Page[SecurityEventOut])
@@ -88,8 +78,8 @@ def list_events(
         filters.append(SecurityEvent.severity == severity)
     if identity_id:
         filters.append(SecurityEvent.identity_id == identity_id)
-    start = _parse_time(from_time, "from_time")
-    end = _parse_time(to_time, "to_time")
+    start = parse_optional_utc(from_time, "from_time")
+    end = parse_optional_utc(to_time, "to_time")
     if start:
         filters.append(SecurityEvent.timestamp >= start)
     if end:
@@ -101,12 +91,12 @@ def list_events(
     rows = list(
         db.scalars(
             query.order_by(SecurityEvent.timestamp.desc())
-            .offset((page - 1) * page_size)
+            .offset(page_offset(page, page_size))
             .limit(page_size)
         )
     )
-    return Page(
-        items=[event_out(row) for row in rows],
+    return page_response(
+        [event_out(row) for row in rows],
         total=total,
         page=page,
         page_size=page_size,

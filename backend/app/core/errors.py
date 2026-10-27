@@ -1,6 +1,17 @@
 from __future__ import annotations
 
+from enum import StrEnum
 from typing import Any
+
+
+class ErrorCode(StrEnum):
+    VALIDATION_ERROR = "VALIDATION_ERROR"
+    INTERNAL_ERROR = "INTERNAL_ERROR"
+    NOT_AUTHENTICATED = "NOT_AUTHENTICATED"
+    FORBIDDEN = "FORBIDDEN"
+    INVALID_TIME_FILTER = "INVALID_TIME_FILTER"
+    RATE_LIMITED = "RATE_LIMITED"
+    CSRF_VALIDATION_FAILED = "CSRF_VALIDATION_FAILED"
 
 
 class ApiError(Exception):

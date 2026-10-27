@@ -11,6 +11,7 @@ from app.api.deps import AuthContext, require_roles
 from app.api.health import build_health_status
 from app.core.database import get_db
 from app.core.errors import ApiError
+from app.core.roles import STAFF_ROLES
 from app.core.time import as_utc
 from app.ml.runtime import get_metadata, model_available
 from app.models import AccessRequest, BehavioralEvent, Identity, SecurityEvent, utcnow
@@ -25,7 +26,6 @@ from app.security.sessions import active_session_count
 from app.serializers import event_out
 
 router = APIRouter(tags=["overview"])
-STAFF_ROLES = ("SECURITY_ADMIN", "SECURITY_ANALYST", "AUDITOR")
 VALID_RANGE_HOURS = {1, 6, 24, 72, 168}
 
 

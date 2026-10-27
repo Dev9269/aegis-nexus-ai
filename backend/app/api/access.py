@@ -1,8 +1,5 @@
 from __future__ import annotations
 
-import csv
-import io
-from datetime import datetime, timezone
 from typing import Literal
 
 from fastapi import APIRouter, Depends, Query, Response
@@ -10,38 +7,25 @@ from sqlalchemy import func, or_, select
 from sqlalchemy.orm import Session
 
 from app.api.deps import AuthContext, get_auth_context, require_roles
+from app.api.schemas import Page
 from app.audit.service import append_audit
+from app.core.csv import csv_download
 from app.core.database import get_db
 from app.core.errors import ApiError
+from app.core.pagination import page_offset, page_response
+from app.core.roles import STAFF_ROLES, WRITE_ROLES
+from app.core.time import parse_optional_utc
 from app.models import AccessRequest, Device, Identity, Resource, new_id
 from app.schemas import (
     AccessRequestDetail,
     AccessRequestOut,
     DecisionOut,
     EvaluateAccessIn,
-    Page,
 )
 from app.serializers import access_detail, access_out
 from app.services.access import evaluate_access
 
 router = APIRouter(prefix="/access-requests", tags=["access"])
-STAFF_ROLES = ("SECURITY_ADMIN", "SECURITY_ANALYST", "AUDITOR")
-
-
-def _parse_time(value: str | None, field: str) -> datetime | None:
-    if not value:
-        return None
-    try:
-        parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
-    except ValueError as exc:
-        raise ApiError(
-            422,
-            "INVALID_TIME_FILTER",
-            f"{field} must be an ISO 8601 timestamp.",
-        ) from exc
-    if parsed.tzinfo is None:
-        parsed = parsed.replace(tzinfo=timezone.utc)
-    return parsed.astimezone(timezone.utc)
 
 
 def _scoped_request_query(
@@ -94,8 +78,8 @@ def _list_filters(
         filters.append(AccessRequest.decision == decision)
     if risk_category:
         filters.append(AccessRequest.risk_category == risk_category)
-    start = _parse_time(from_time, "from_time")
-    end = _parse_time(to_time, "to_time")
+    start = parse_optional_utc(from_time, "from_time")
+    end = parse_optional_utc(to_time, "to_time")
     if start:
         filters.append(AccessRequest.created_at >= start)
     if end:
@@ -131,23 +115,11 @@ def list_access_requests(
     rows = list(
         db.scalars(
             query.order_by(AccessRequest.created_at.desc())
-            .offset((page - 1) * page_size)
+            .offset(page_offset(page, page_size))
             .limit(page_size)
         )
     )
-    return Page(
-        items=[access_out(row) for row in rows],
-        total=total,
-        page=page,
-        page_size=page_size,
-    )
-
-
-def _csv_safe(value: object) -> str:
-    text = "" if value is None else str(value)
-    if text.startswith(("=", "+", "-", "@")):
-        return f"'{text}"
-    return text
+    return page_response([access_out(row) for row in rows], total=total, page=page, page_size=page_size)
 
 
 @router.get("/export.csv")
@@ -172,11 +144,40 @@ def export_access_requests(
     if filters:
         query = query.where(*filters)
     rows = list(db.scalars(query.order_by(AccessRequest.created_at.desc()).limit(5000)))
-
-    output = io.StringIO()
-    writer = csv.writer(output)
-    writer.writerow(
+    csv_rows = [
         [
+            row.id,
+            row.created_at.isoformat() if row.created_at else "",
+            row.identity.display_name if row.identity else "",
+            row.identity.email if row.identity else "",
+            row.resource.name if row.resource else "",
+            row.resource.key if row.resource else "",
+            row.requested_action,
+            row.device_id or "",
+            row.risk_score,
+            row.risk_category,
+            row.decision,
+            row.policy_version,
+            ",".join(reason.get("code", "") for reason in row.reasons or []),
+            row.is_simulated,
+        ]
+        for row in rows
+    ]
+
+    correlation_id = new_id()
+    append_audit(
+        db,
+        actor=auth.identity,
+        action="EXPORT_ACCESS_REQUESTS",
+        target_type="access_requests",
+        target_id=None,
+        correlation_id=correlation_id,
+        result="SUCCESS",
+        metadata={"row_count": len(rows), "filters": {"decision": decision, "q": bool(q)}},
+    )
+    db.commit()
+    return csv_download(
+        headers=[
             "request_id",
             "timestamp",
             "identity",
@@ -191,47 +192,10 @@ def export_access_requests(
             "policy_version",
             "reason_codes",
             "simulated",
-        ]
-    )
-    for row in rows:
-        writer.writerow(
-            [
-                _csv_safe(row.id),
-                _csv_safe(row.created_at.isoformat() if row.created_at else ""),
-                _csv_safe(row.identity.display_name if row.identity else ""),
-                _csv_safe(row.identity.email if row.identity else ""),
-                _csv_safe(row.resource.name if row.resource else ""),
-                _csv_safe(row.resource.key if row.resource else ""),
-                _csv_safe(row.requested_action),
-                _csv_safe(row.device_id or ""),
-                _csv_safe(row.risk_score),
-                _csv_safe(row.risk_category),
-                _csv_safe(row.decision),
-                _csv_safe(row.policy_version),
-                _csv_safe(",".join(reason.get("code", "") for reason in row.reasons or [])),
-                _csv_safe(row.is_simulated),
-            ]
-        )
-
-    correlation_id = new_id()
-    append_audit(
-        db,
-        actor=auth.identity,
-        action="EXPORT_ACCESS_REQUESTS",
-        target_type="access_requests",
-        target_id=None,
+        ],
+        rows=csv_rows,
+        filename="aegis-access-requests.csv",
         correlation_id=correlation_id,
-        result="SUCCESS",
-        metadata={"row_count": len(rows), "filters": {"decision": decision, "q": bool(q)}},
-    )
-    db.commit()
-    return Response(
-        content=output.getvalue(),
-        media_type="text/csv; charset=utf-8",
-        headers={
-            "Content-Disposition": 'attachment; filename="aegis-access-requests.csv"',
-            "X-Correlation-ID": correlation_id,
-        },
     )
 
 
@@ -243,7 +207,7 @@ def evaluate_access_request(
 ) -> DecisionOut:
     if auth.identity.role == "AUDITOR":
         raise ApiError(403, "FORBIDDEN", "Auditors have read-only access.")
-    is_staff = auth.identity.role in {"SECURITY_ADMIN", "SECURITY_ANALYST"}
+    is_staff = auth.identity.role in WRITE_ROLES
     subject_id = payload.identity_id or auth.identity.id
     if not is_staff and subject_id != auth.identity.id:
         raise ApiError(403, "FORBIDDEN", "You may only request access for your own identity.")

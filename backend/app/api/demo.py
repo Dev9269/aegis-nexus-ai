@@ -9,12 +9,11 @@ from app.api.deps import AuthContext, require_roles
 from app.core.config import get_settings
 from app.core.database import get_db
 from app.core.errors import ApiError
+from app.core.roles import ADMIN_ROLES, STAFF_ROLES, WRITE_ROLES
 from app.schemas import DemoResetOut, DemoRunOut, DemoScenarioInfo
 from app.services.demo import list_demo_scenarios, reset_demo_data, run_demo_scenarios
 
 router = APIRouter(prefix="/demo", tags=["demo"])
-STAFF_ROLES = ("SECURITY_ADMIN", "SECURITY_ANALYST", "AUDITOR")
-WRITE_ROLES = ("SECURITY_ADMIN", "SECURITY_ANALYST")
 ScenarioId = Literal["A", "B", "C", "D", "E", "F"]
 
 
@@ -76,7 +75,7 @@ def run_all_demo_scenarios(
 
 @router.post("/reset", response_model=DemoResetOut)
 def reset_demo(
-    auth: AuthContext = Depends(require_roles("SECURITY_ADMIN")),
+    auth: AuthContext = Depends(require_roles(*ADMIN_ROLES)),
     db: Session = Depends(get_db),
 ) -> DemoResetOut:
     _require_demo_mode()

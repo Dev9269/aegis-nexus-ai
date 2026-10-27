@@ -1,34 +1,21 @@
 from __future__ import annotations
 
-import csv
-import io
-from datetime import datetime, timezone
-
 from fastapi import APIRouter, Depends, Query, Response
 from sqlalchemy import func, or_, select
 from sqlalchemy.orm import Session
 
 from app.api.deps import AuthContext, require_roles
+from app.api.schemas import Page
 from app.audit.service import append_audit, verify_audit_chain
+from app.core.csv import csv_download
 from app.core.database import get_db
-from app.core.errors import ApiError
+from app.core.pagination import page_offset, page_response
+from app.core.roles import STAFF_ROLES
+from app.core.time import parse_optional_utc
 from app.models import AuditLog, new_id
-from app.schemas import AuditOut, AuditVerifyOut, Page
+from app.schemas import AuditOut, AuditVerifyOut
 
 router = APIRouter(prefix="/audit", tags=["audit"])
-STAFF_ROLES = ("SECURITY_ADMIN", "SECURITY_ANALYST", "AUDITOR")
-
-
-def _parse_time(value: str | None, field: str) -> datetime | None:
-    if not value:
-        return None
-    try:
-        parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
-    except ValueError as exc:
-        raise ApiError(422, "INVALID_TIME_FILTER", f"{field} must be an ISO 8601 timestamp.") from exc
-    if parsed.tzinfo is None:
-        parsed = parsed.replace(tzinfo=timezone.utc)
-    return parsed.astimezone(timezone.utc)
 
 
 def _filters(
@@ -58,20 +45,13 @@ def _filters(
         filters.append(AuditLog.actor_id == actor_id)
     if target_type:
         filters.append(AuditLog.target_type == target_type)
-    start = _parse_time(from_time, "from_time")
-    end = _parse_time(to_time, "to_time")
+    start = parse_optional_utc(from_time, "from_time")
+    end = parse_optional_utc(to_time, "to_time")
     if start:
         filters.append(AuditLog.timestamp >= start)
     if end:
         filters.append(AuditLog.timestamp <= end)
     return filters
-
-
-def _csv_safe(value: object) -> str:
-    text = "" if value is None else str(value)
-    if text.startswith(("=", "+", "-", "@")):
-        return f"'{text}"
-    return text
 
 
 @router.get("", response_model=Page[AuditOut])
@@ -104,12 +84,12 @@ def list_audit(
     rows = list(
         db.scalars(
             query.order_by(AuditLog.sequence.desc())
-            .offset((page - 1) * page_size)
+            .offset(page_offset(page, page_size))
             .limit(page_size)
         )
     )
-    return Page(
-        items=[AuditOut.model_validate(row) for row in rows],
+    return page_response(
+        [AuditOut.model_validate(row) for row in rows],
         total=total,
         page=page,
         page_size=page_size,
@@ -153,40 +133,22 @@ def export_audit(
     if filters:
         query = query.where(*filters)
     rows = list(db.scalars(query.order_by(AuditLog.sequence.asc()).limit(10000)))
-
-    output = io.StringIO()
-    writer = csv.writer(output)
-    writer.writerow(
+    csv_rows = [
         [
-            "sequence",
-            "timestamp",
-            "actor",
-            "action",
-            "target_type",
-            "target_id",
-            "result",
-            "policy_version",
-            "correlation_id",
-            "prev_hash",
-            "record_hash",
+            row.sequence,
+            row.timestamp.isoformat() if row.timestamp else "",
+            row.actor_label,
+            row.action,
+            row.target_type,
+            row.target_id,
+            row.result,
+            row.policy_version,
+            row.correlation_id,
+            row.prev_hash,
+            row.record_hash,
         ]
-    )
-    for row in rows:
-        writer.writerow(
-            [
-                row.sequence,
-                _csv_safe(row.timestamp.isoformat() if row.timestamp else ""),
-                _csv_safe(row.actor_label),
-                _csv_safe(row.action),
-                _csv_safe(row.target_type),
-                _csv_safe(row.target_id),
-                _csv_safe(row.result),
-                _csv_safe(row.policy_version),
-                _csv_safe(row.correlation_id),
-                _csv_safe(row.prev_hash),
-                _csv_safe(row.record_hash),
-            ]
-        )
+        for row in rows
+    ]
 
     correlation_id = new_id()
     append_audit(
@@ -200,11 +162,21 @@ def export_audit(
         metadata={"row_count": len(rows), "filters": {"action": action, "q": bool(q)}},
     )
     db.commit()
-    return Response(
-        content=output.getvalue(),
-        media_type="text/csv; charset=utf-8",
-        headers={
-            "Content-Disposition": 'attachment; filename="aegis-audit-log.csv"',
-            "X-Correlation-ID": correlation_id,
-        },
+    return csv_download(
+        headers=[
+            "sequence",
+            "timestamp",
+            "actor",
+            "action",
+            "target_type",
+            "target_id",
+            "result",
+            "policy_version",
+            "correlation_id",
+            "prev_hash",
+            "record_hash",
+        ],
+        rows=csv_rows,
+        filename="aegis-audit-log.csv",
+        correlation_id=correlation_id,
     )

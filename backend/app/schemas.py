@@ -1,28 +1,11 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Any, Generic, Literal, TypeVar
+from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
-T = TypeVar("T")
-
-
-class Page(BaseModel, Generic[T]):
-    items: list[T]
-    total: int
-    page: int
-    page_size: int
-
-
-class ErrorBody(BaseModel):
-    code: str
-    message: str
-    details: Any | None = None
-
-
-class ErrorResponse(BaseModel):
-    error: ErrorBody
+from app.api.schemas import ErrorBody, ErrorResponse, Page  # noqa: F401  # TEMP-COMPAT
 
 
 class LoginIn(BaseModel):

@@ -4,12 +4,12 @@ from fastapi import APIRouter, Depends
 
 from app.api.deps import AuthContext, require_roles
 from app.core.config import get_settings
+from app.core.roles import STAFF_ROLES
 from app.ml.runtime import get_metadata, model_available
 from app.ml.scoring import MODEL_LIMITATIONS
 from app.schemas import SettingsInfoOut
 
 router = APIRouter(prefix="/settings", tags=["settings"])
-STAFF_ROLES = ("SECURITY_ADMIN", "SECURITY_ANALYST", "AUDITOR")
 
 
 @router.get("/info", response_model=SettingsInfoOut)
