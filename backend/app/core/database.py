@@ -34,7 +34,7 @@ def get_db() -> Generator[Session, None, None]:
 
 
 def init_db() -> None:
-    from app import models  # noqa: F401 - registers metadata
+    from app.db import models  # noqa: F401 - registers metadata
 
     Base.metadata.create_all(bind=engine)
 
