@@ -8,69 +8,20 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator, model_valida
 from app.api.schemas import ErrorBody, ErrorResponse, Page  # noqa: F401  # TEMP-COMPAT
 from app.domains.audit.schemas import AuditOut, AuditVerifyOut  # noqa: F401  # TEMP-COMPAT
 from app.domains.auth.schemas import LoginIn, MeOut  # noqa: F401  # TEMP-COMPAT
+from app.domains.devices.schemas import (  # noqa: F401  # TEMP-COMPAT
+    DeviceEnrollIn,
+    DeviceOut,
+    DeviceStateIn,
+)
 from app.domains.events.schemas import NotificationOut, SecurityEventOut  # noqa: F401  # TEMP-COMPAT
+from app.domains.identities.schemas import (  # noqa: F401  # TEMP-COMPAT
+    BehavioralSignalOut,
+    IdentityDetail,
+    IdentitySummary,
+    RiskPoint,
+    SessionOut,
+)
 from app.domains.system.schemas import HealthStatus, SettingsInfoOut  # noqa: F401  # TEMP-COMPAT
-
-
-class IdentitySummary(BaseModel):
-    model_config = ConfigDict(from_attributes=True)
-
-    id: str
-    display_name: str
-    email: str
-    role: str
-    status: str
-    department: str
-    title: str
-    current_risk: float
-    last_activity_at: datetime | None
-    is_simulated: bool
-
-
-class SessionOut(BaseModel):
-    model_config = ConfigDict(from_attributes=True)
-
-    id: str
-    created_at: datetime
-    expires_at: datetime
-    ip_address: str | None
-    user_agent: str | None
-    is_simulated: bool
-
-
-class DeviceOut(BaseModel):
-    model_config = ConfigDict(from_attributes=True)
-
-    id: str
-    identity_id: str
-    identity_name: str | None = None
-    name: str
-    device_type: str
-    operating_system: str
-    state: str
-    enrollment_status: str
-    last_observed_at: datetime | None
-    enrolled_at: datetime
-    revoked_at: datetime | None
-    signals: dict[str, Any]
-    is_simulated: bool
-
-
-class RiskPoint(BaseModel):
-    timestamp: datetime
-    risk_score: float
-    risk_category: str
-    source: str
-
-
-class BehavioralSignalOut(BaseModel):
-    id: str
-    detected_at: datetime
-    risk_score: float
-    risk_category: str
-    model_version: str
-    top_factors: list[dict[str, Any]]
-    is_simulated: bool
 
 
 class AccessRequestOut(BaseModel):
@@ -106,18 +57,6 @@ class AccessRequestDetail(AccessRequestOut):
     model_version: str | None = None
     feature_summary: list[dict[str, Any]] = Field(default_factory=list)
     features: dict[str, Any] = Field(default_factory=dict)
-
-
-class IdentityDetail(IdentitySummary):
-    created_at: datetime
-    active_sessions: int
-    sessions: list[SessionOut]
-    devices: list[DeviceOut]
-    recent_access: list[AccessRequestOut]
-    behavioral_signals: list[BehavioralSignalOut]
-    risk_history: list[RiskPoint]
-    alerts: list["SecurityEventOut"]
-    audit_events: list["AuditOut"]
 
 
 class ResourceOut(BaseModel):
@@ -269,19 +208,6 @@ class IncidentUpdateIn(BaseModel):
 
 class IncidentNoteIn(BaseModel):
     note: str = Field(min_length=1, max_length=2000)
-
-
-class DeviceEnrollIn(BaseModel):
-    identity_id: str
-    name: str = Field(min_length=2, max_length=120)
-    device_type: Literal["Laptop", "Desktop", "Mobile", "Tablet", "Virtual Machine"]
-    operating_system: str = Field(min_length=2, max_length=80)
-    initial_state: Literal["TRUSTED", "UNVERIFIED"] = "UNVERIFIED"
-
-
-class DeviceStateIn(BaseModel):
-    state: Literal["TRUSTED", "UNVERIFIED", "RESTRICTED", "REVOKED"]
-    reason: str = Field(min_length=3, max_length=500)
 
 
 class PolicyUpdateIn(BaseModel):
@@ -469,5 +395,5 @@ class DemoResetOut(BaseModel):
     message: str
 
 
-IdentityDetail.model_rebuild()
+IdentityDetail.model_rebuild(_types_namespace={"AccessRequestOut": AccessRequestOut})
 IncidentDetail.model_rebuild()

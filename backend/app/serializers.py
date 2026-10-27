@@ -1,10 +1,13 @@
 from __future__ import annotations
 
+from app.domains.devices.presenters import device_out  # noqa: F401  # TEMP-COMPAT
 from app.domains.events.presenters import event_out  # noqa: F401  # TEMP-COMPAT
+from app.domains.identities.presenters import (  # noqa: F401  # TEMP-COMPAT
+    behavioral_signal_out,
+    identity_summary,
+)
 from app.models import (
     AccessRequest,
-    Device,
-    Identity,
     Incident,
     BehavioralEvent,
 )
@@ -12,33 +15,8 @@ from app.schemas import (
     AccessRequestDetail,
     AccessRequestOut,
     BehavioralEventOut,
-    BehavioralSignalOut,
-    DeviceOut,
-    IdentitySummary,
     IncidentOut,
 )
-
-
-def identity_summary(identity: Identity) -> IdentitySummary:
-    return IdentitySummary.model_validate(identity)
-
-
-def device_out(device: Device) -> DeviceOut:
-    return DeviceOut(
-        id=device.id,
-        identity_id=device.identity_id,
-        identity_name=device.identity.display_name if device.identity else None,
-        name=device.name,
-        device_type=device.device_type,
-        operating_system=device.operating_system,
-        state=device.state,
-        enrollment_status=device.enrollment_status,
-        last_observed_at=device.last_observed_at,
-        enrolled_at=device.enrolled_at,
-        revoked_at=device.revoked_at,
-        signals=device.signals or {},
-        is_simulated=device.is_simulated,
-    )
 
 
 def access_out(request: AccessRequest) -> AccessRequestOut:
@@ -90,18 +68,6 @@ def behavioral_event_out(event: BehavioralEvent) -> BehavioralEventOut:
         feature_summary=event.feature_summary or [],
         model_version=event.model_version,
         detected_at=event.detected_at,
-        is_simulated=event.is_simulated,
-    )
-
-
-def behavioral_signal_out(event: BehavioralEvent) -> BehavioralSignalOut:
-    return BehavioralSignalOut(
-        id=event.id,
-        detected_at=event.detected_at,
-        risk_score=event.risk_score,
-        risk_category=event.risk_category,
-        model_version=event.model_version,
-        top_factors=(event.feature_summary or [])[:3],
         is_simulated=event.is_simulated,
     )
 
