@@ -1,8 +1,40 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { ApiError, buildQuery, request } from "./api";
+import { ApiError, buildQuery, request } from "./http";
 
-afterEach(() => {
-  vi.unstubAllGlobals();
+afterEach(() => vi.unstubAllGlobals());
+
+describe("http", () => {
+  it("adds double-submit CSRF headers for unsafe methods", async () => {
+    document.cookie = "aegis_csrf=csrf-test";
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(JSON.stringify({ ok: true }), {
+        status: 200,
+        headers: { "content-type": "application/json" },
+      }),
+    );
+    vi.stubGlobal("fetch", fetchMock);
+    await request("/demo/run", { method: "POST" });
+    const init = fetchMock.mock.calls[0][1] as RequestInit;
+    expect((init.headers as Headers).get("X-CSRF-Token")).toBe("csrf-test");
+    expect(init.credentials).toBe("include");
+  });
+
+  it("preserves the error envelope contract", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue(
+        new Response(
+          JSON.stringify({ error: { code: "FORBIDDEN", message: "Denied." } }),
+          { status: 403, headers: { "content-type": "application/json" } },
+        ),
+      ),
+    );
+    await expect(request("/audit")).rejects.toMatchObject({
+      status: 403,
+      code: "FORBIDDEN",
+      message: "Denied.",
+    });
+  });
 });
 
 describe("buildQuery", () => {

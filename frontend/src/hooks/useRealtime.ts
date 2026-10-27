@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { websocketUrl } from "../services/api";
+import { websocketUrl } from "../config/env";
 import type { SecurityEvent } from "../types/api";
 
 export type StreamState = "connecting" | "connected" | "reconnecting" | "unavailable";
