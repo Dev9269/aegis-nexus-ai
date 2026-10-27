@@ -7,31 +7,9 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator, model_valida
 
 from app.api.schemas import ErrorBody, ErrorResponse, Page  # noqa: F401  # TEMP-COMPAT
 from app.domains.audit.schemas import AuditOut, AuditVerifyOut  # noqa: F401  # TEMP-COMPAT
+from app.domains.auth.schemas import LoginIn, MeOut  # noqa: F401  # TEMP-COMPAT
 from app.domains.events.schemas import NotificationOut, SecurityEventOut  # noqa: F401  # TEMP-COMPAT
-
-
-class LoginIn(BaseModel):
-    email: str = Field(min_length=3, max_length=255)
-    password: str = Field(min_length=1, max_length=256)
-
-    @field_validator("email")
-    @classmethod
-    def normalize_email(cls, value: str) -> str:
-        return value.strip().lower()
-
-
-class MeOut(BaseModel):
-    id: str
-    display_name: str
-    email: str
-    role: str
-    status: str
-    department: str
-    title: str
-    current_risk: float
-    csrf_token: str
-    session_expires_at: datetime
-    demo_mode: bool
+from app.domains.system.schemas import HealthStatus, SettingsInfoOut  # noqa: F401  # TEMP-COMPAT
 
 
 class IdentitySummary(BaseModel):
@@ -403,16 +381,6 @@ class RiskLeader(BaseModel):
     anomaly_count: int
 
 
-class HealthStatus(BaseModel):
-    api: str
-    database: str
-    model: str
-    event_stream: str
-    model_version: str | None = None
-    stream_clients: int = 0
-    checked_at: datetime
-
-
 class OverviewOut(BaseModel):
     range_hours: int
     range_label: str
@@ -499,18 +467,6 @@ class DemoResetOut(BaseModel):
     access_requests: int
     incidents: int
     message: str
-
-
-class SettingsInfoOut(BaseModel):
-    environment: str
-    demo_mode: bool
-    session_ttl_minutes: int
-    login_rate_limit: int
-    login_rate_window_seconds: int
-    allowed_origins: list[str]
-    model_artifact_available: bool
-    model_version: str | None
-    limitations: list[str]
 
 
 IdentityDetail.model_rebuild()

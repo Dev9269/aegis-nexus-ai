@@ -4,7 +4,6 @@ import asyncio
 import logging
 import re
 from contextlib import asynccontextmanager
-from datetime import datetime, timezone
 from time import perf_counter
 from uuid import uuid4
 
@@ -13,21 +12,7 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-from app.api import (
-    access,
-    audit,
-    auth,
-    demo,
-    devices,
-    events,
-    health,
-    identities,
-    incidents,
-    model,
-    overview,
-    policies,
-    settings as settings_api,
-)
+from app.api.router import router as api_router
 from app.core.config import get_settings, validate_runtime_settings
 from app.core.database import init_db
 from app.core.errors import ApiError
@@ -160,28 +145,7 @@ def create_app() -> FastAPI:
             "An internal error occurred. No sensitive details are exposed.",
         )
 
-    application.include_router(health.router, prefix="/api")
-    application.include_router(auth.router, prefix="/api")
-    application.include_router(identities.router, prefix="/api")
-    application.include_router(devices.router, prefix="/api")
-    application.include_router(access.router, prefix="/api")
-    application.include_router(policies.router, prefix="/api")
-    application.include_router(events.router, prefix="/api")
-    application.include_router(incidents.router, prefix="/api")
-    application.include_router(overview.router, prefix="/api")
-    application.include_router(model.router, prefix="/api")
-    application.include_router(audit.router, prefix="/api")
-    application.include_router(settings_api.router, prefix="/api")
-    application.include_router(demo.router, prefix="/api")
-
-    @application.get("/api", tags=["meta"])
-    def api_root() -> dict[str, str]:
-        return {
-            "name": "AEGIS NEXUS AI",
-            "tagline": "Trust Nothing. Verify Everything. Adapt Intelligently.",
-            "version": "0.1.0",
-            "time": datetime.now(timezone.utc).isoformat(),
-        }
+    application.include_router(api_router)
 
     return application
 

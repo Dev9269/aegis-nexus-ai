@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from app.api import health
+from app.domains.system import service as system_service
 
 
 def test_readiness_is_public_and_reports_checks(client):
@@ -12,7 +12,7 @@ def test_readiness_is_public_and_reports_checks(client):
 
 
 def test_readiness_fails_closed_when_database_is_unavailable(client, monkeypatch):
-    monkeypatch.setattr(health, "database_is_available", lambda: False)
+    monkeypatch.setattr(system_service, "database_is_available", lambda: False)
 
     response = client.get("/api/health/ready")
 
