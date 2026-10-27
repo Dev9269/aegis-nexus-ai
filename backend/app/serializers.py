@@ -1,11 +1,11 @@
 from __future__ import annotations
 
+from app.domains.events.presenters import event_out  # noqa: F401  # TEMP-COMPAT
 from app.models import (
     AccessRequest,
     Device,
     Identity,
     Incident,
-    SecurityEvent,
     BehavioralEvent,
 )
 from app.schemas import (
@@ -16,7 +16,6 @@ from app.schemas import (
     DeviceOut,
     IdentitySummary,
     IncidentOut,
-    SecurityEventOut,
 )
 
 
@@ -125,7 +124,3 @@ def incident_out(incident: Incident) -> IncidentOut:
         updated_at=incident.updated_at,
         is_simulated=incident.is_simulated,
     )
-
-
-def event_out(event: SecurityEvent) -> SecurityEventOut:
-    return SecurityEventOut.model_validate(event)

@@ -6,6 +6,8 @@ from typing import Any, Literal
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 from app.api.schemas import ErrorBody, ErrorResponse, Page  # noqa: F401  # TEMP-COMPAT
+from app.domains.audit.schemas import AuditOut, AuditVerifyOut  # noqa: F401  # TEMP-COMPAT
+from app.domains.events.schemas import NotificationOut, SecurityEventOut  # noqa: F401  # TEMP-COMPAT
 
 
 class LoginIn(BaseModel):
@@ -291,52 +293,6 @@ class IncidentNoteIn(BaseModel):
     note: str = Field(min_length=1, max_length=2000)
 
 
-class SecurityEventOut(BaseModel):
-    model_config = ConfigDict(from_attributes=True)
-
-    id: str
-    event_type: str
-    category: str
-    severity: str
-    summary: str
-    identity_id: str | None
-    device_id: str | None
-    access_request_id: str | None
-    incident_id: str | None
-    actor_id: str | None
-    policy_version: str | None
-    correlation_id: str
-    details: dict[str, Any]
-    timestamp: datetime
-    is_simulated: bool
-
-
-class AuditOut(BaseModel):
-    model_config = ConfigDict(from_attributes=True)
-
-    id: str
-    sequence: int
-    timestamp: datetime
-    actor_id: str | None
-    actor_label: str
-    action: str
-    target_type: str
-    target_id: str | None
-    result: str
-    policy_version: str | None
-    correlation_id: str
-    metadata_json: dict[str, Any]
-    prev_hash: str
-    record_hash: str
-
-
-class AuditVerifyOut(BaseModel):
-    valid: bool
-    checked_records: int
-    first_invalid_id: str | None = None
-    message: str
-
-
 class DeviceEnrollIn(BaseModel):
     identity_id: str
     name: str = Field(min_length=2, max_length=120)
@@ -543,15 +499,6 @@ class DemoResetOut(BaseModel):
     access_requests: int
     incidents: int
     message: str
-
-
-class NotificationOut(BaseModel):
-    id: str
-    title: str
-    severity: str
-    timestamp: datetime
-    event_type: str
-    link: str
 
 
 class SettingsInfoOut(BaseModel):
