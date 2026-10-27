@@ -28,6 +28,11 @@ from app.db.models import (
     utcnow,
 )
 from app.domains.access import repository
+from app.domains.access.anomaly import (
+    REPEATED_ANOMALY_RISK_THRESHOLD,
+    REPEATED_ANOMALY_WINDOW_MINUTES,
+    analyze_behavior,
+)
 from app.domains.access.presenters import access_detail, access_out
 from app.domains.access.schemas import (
     AccessRequestDetail,
@@ -36,14 +41,9 @@ from app.domains.access.schemas import (
     EvaluateAccessIn,
 )
 from app.domains.events.service import record_event
+from app.domains.incidents.service import create_or_escalate_for_decision
 from app.domains.policies.engine import PolicyDecision, evaluate_policy
 from app.security.sessions import revoke_identity_sessions
-from app.services.anomaly import (
-    REPEATED_ANOMALY_RISK_THRESHOLD,
-    REPEATED_ANOMALY_WINDOW_MINUTES,
-    analyze_behavior,
-)
-from app.services.incidents import create_or_escalate_for_decision
 
 SEVERITY_BY_RISK = {
     "LOW": Severity.LOW.value,

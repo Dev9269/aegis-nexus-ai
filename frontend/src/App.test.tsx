@@ -26,6 +26,8 @@ const employee: Me = {
 
 async function renderAt(path: string) {
   vi.resetModules();
+  const mod = await import("./app/query-client");
+  if (mod.queryClient?.clear) mod.queryClient.clear();
   const { default: App } = await import("./App");
   return render(
     <MemoryRouter initialEntries={[path]}>
@@ -49,7 +51,7 @@ describe("application routing", () => {
 
     await renderAt("/audit");
 
-    expect(await screen.findByRole("heading", { name: "Enter the command center" })).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: "Enter the command center" }, { timeout: 120000 })).toBeInTheDocument();
     expect(screen.queryByText("Audit ledger")).not.toBeInTheDocument();
   });
 

@@ -4,7 +4,7 @@ import { NAV_GROUP_ORDER, visibleNav } from "../../lib/navigation";
 import { cn, ROLE_LABELS, initials } from "../../lib/utils";
 import { useAuth } from "../../hooks/useAuth";
 import { useDialogFocus } from "../../hooks/useDialogFocus";
-import { BrandMark } from "./BrandMark";
+import { BrandMark } from "../../components/layout/BrandMark";
 
 interface SidebarProps {
   collapsed: boolean;

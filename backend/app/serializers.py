@@ -7,14 +7,9 @@ from app.domains.identities.presenters import (  # noqa: F401  # TEMP-COMPAT
     behavioral_signal_out,
     identity_summary,
 )
-from app.models import (
-    Incident,
-    BehavioralEvent,
-)
-from app.schemas import (
-    BehavioralEventOut,
-    IncidentOut,
-)
+from app.domains.incidents.presenters import incident_out  # noqa: F401  # TEMP-COMPAT
+from app.db.models import BehavioralEvent
+from app.schemas import BehavioralEventOut
 
 
 def behavioral_event_out(event: BehavioralEvent) -> BehavioralEventOut:
@@ -31,24 +26,4 @@ def behavioral_event_out(event: BehavioralEvent) -> BehavioralEventOut:
         model_version=event.model_version,
         detected_at=event.detected_at,
         is_simulated=event.is_simulated,
-    )
-
-
-def incident_out(incident: Incident) -> IncidentOut:
-    return IncidentOut(
-        id=incident.id,
-        title=incident.title,
-        classification=incident.classification,
-        severity=incident.severity,
-        status=incident.status,
-        identity_id=incident.identity_id,
-        identity_name=incident.identity.display_name if incident.identity else None,
-        summary=incident.summary,
-        assigned_to=incident.assigned_to,
-        related_access_request_ids=incident.related_access_request_ids or [],
-        related_device_ids=incident.related_device_ids or [],
-        resolution=incident.resolution,
-        created_at=incident.created_at,
-        updated_at=incident.updated_at,
-        is_simulated=incident.is_simulated,
     )

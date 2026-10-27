@@ -26,7 +26,7 @@ import {
   RISK_STYLES,
   riskTone,
 } from "../../lib/utils";
-import { Avatar, SeverityBadge } from "../ui";
+import { Avatar, SeverityBadge } from "../../components/ui";
 
 export function Topbar({
   streamState,

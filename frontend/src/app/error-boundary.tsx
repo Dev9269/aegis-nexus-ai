@@ -1,6 +1,6 @@
 import { Component, type ErrorInfo, type ReactNode } from "react";
 import { RefreshCw, TriangleAlert } from "lucide-react";
-import { BrandMark } from "./layout/BrandMark";
+import { BrandMark } from "../components/layout/BrandMark";
 
 interface Props {
   children: ReactNode;

@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 
 from app.audit.service import append_audit
 from app.core.config import get_settings
-from app.models import (
+from app.db.models import (
     AccessPolicy,
     Device,
     Identity,
@@ -20,9 +20,9 @@ from app.models import (
     new_id,
     utcnow,
 )
+from app.domains.events.service import record_event
 from app.security.passwords import hash_password
 from app.security.sessions import create_session
-from app.services.events import record_event
 
 settings = get_settings()
 
