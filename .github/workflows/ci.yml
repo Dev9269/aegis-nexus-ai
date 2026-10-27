@@ -62,6 +62,8 @@ jobs:
           cache-dependency-path: frontend/package-lock.json
       - name: Install frontend dependencies
         run: npm ci
+      - name: Check generated API types
+        run: npm run api:check
       - name: Typecheck
         run: npm run typecheck
       - name: Run frontend tests
