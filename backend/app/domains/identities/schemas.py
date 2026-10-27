@@ -1,16 +1,14 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
 from pydantic import BaseModel, ConfigDict
 
+from app.domains.access.schemas import AccessRequestOut
 from app.domains.audit.schemas import AuditOut
 from app.domains.devices.schemas import DeviceOut
 from app.domains.events.schemas import SecurityEventOut
-
-if TYPE_CHECKING:
-    from app.schemas import AccessRequestOut
 
 
 class IdentitySummary(BaseModel):
@@ -61,7 +59,7 @@ class IdentityDetail(IdentitySummary):
     active_sessions: int
     sessions: list[SessionOut]
     devices: list[DeviceOut]
-    recent_access: list["AccessRequestOut"]
+    recent_access: list[AccessRequestOut]
     behavioral_signals: list[BehavioralSignalOut]
     risk_history: list[RiskPoint]
     alerts: list[SecurityEventOut]

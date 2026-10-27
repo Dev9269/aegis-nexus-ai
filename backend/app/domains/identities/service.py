@@ -9,6 +9,7 @@ from app.api.schemas import Page
 from app.core.errors import ApiError
 from app.core.pagination import page_response
 from app.core.roles import STAFF_ROLES
+from app.domains.access.presenters import access_out
 from app.domains.audit.presenters import audit_out
 from app.domains.devices.presenters import device_out
 from app.domains.events.presenters import event_out
@@ -16,7 +17,6 @@ from app.domains.identities import repository
 from app.domains.identities.presenters import behavioral_signal_out, identity_summary
 from app.domains.identities.schemas import IdentityDetail, IdentitySummary, RiskPoint
 from app.security.sessions import active_session_count
-from app.serializers import access_out  # noqa: F401  # TEMP-COMPAT
 
 
 def list_identities(
