@@ -4,10 +4,12 @@ import { ApiError } from "../lib/http";
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 0,
-      gcTime: 0,
+      staleTime: 15_000,
       refetchOnWindowFocus: false,
-      retry: false,
+      retry: (failureCount, error) => {
+        if (error instanceof ApiError && error.status >= 400 && error.status < 500) return false;
+        return failureCount < 1;
+      },
     },
     mutations: { retry: false },
   },

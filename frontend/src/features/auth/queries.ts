@@ -15,10 +15,11 @@ export function useMe() {
     queryKey: authKeys.me,
     queryFn: getMe,
     retry: false,
-    staleTime: 0,
-    gcTime: 0,
+    retryOnMount: false,
+    staleTime: Infinity,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
     refetchOnWindowFocus: false,
-    refetchOnMount: true,
   });
 }
 

@@ -51,7 +51,7 @@ describe("application routing", () => {
 
     await renderAt("/audit");
 
-    expect(await screen.findByRole("heading", { name: "Enter the command center" }, { timeout: 120000 })).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: "Enter the command center" })).toBeInTheDocument();
     expect(screen.queryByText("Audit ledger")).not.toBeInTheDocument();
   });
 
