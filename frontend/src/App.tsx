@@ -1,7 +1,8 @@
 import { lazy, Suspense } from "react";
 import { Navigate, Outlet, Route, Routes, useParams } from "react-router-dom";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
+import { queryClient } from "./app/query-client";
 import { AppErrorBoundary } from "./components/AppErrorBoundary";
 import { AppShell } from "./components/layout/AppShell";
 import { BrandMark } from "./components/layout/BrandMark";
@@ -9,7 +10,6 @@ import { ForbiddenState } from "./components/ui";
 import { AuthProvider, useAuth } from "./hooks/useAuth";
 import { ThemeProvider } from "./hooks/useTheme";
 import { ToastProvider } from "./hooks/useToast";
-import { ApiError } from "./services/api";
 import type { Role } from "./types/api";
 
 const LoginPage = lazy(() => import("./pages/LoginPage"));
@@ -28,20 +28,6 @@ const AuditPage = lazy(() => import("./pages/AuditPage"));
 const DemoPage = lazy(() => import("./pages/DemoPage"));
 const SettingsPage = lazy(() => import("./pages/SettingsPage"));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 15_000,
-      refetchOnWindowFocus: false,
-      retry: (failureCount, error) => {
-        if (error instanceof ApiError && error.status >= 400 && error.status < 500) return false;
-        return failureCount < 1;
-      },
-    },
-    mutations: { retry: false },
-  },
-});
 
 function homeForRole(role: Role): string {
   return role === "EMPLOYEE" ? "/me" : "/";
