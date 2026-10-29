@@ -1,0 +1,28 @@
+app = "aegis-nexus-ai"
+primary_region = "sin"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  AEGIS_ENVIRONMENT = "development"
+  AEGIS_DEMO_MODE = "true"
+  AEGIS_DEMO_PASSWORD = "ChangeMe-Demo!2026"
+  AEGIS_COOKIE_SECURE = "true"
+  AEGIS_DATABASE_URL = "sqlite:///./aegis.db"
+  AEGIS_AUTO_CREATE_TABLES = "true"
+  AEGIS_MODEL_ARTIFACT_DIR = "ml/artifacts"
+  AEGIS_ALLOWED_ORIGINS = "https://aegis-nexus-ai.fly.dev"
+  PORT = "8080"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+
+[[vm]]
+  cpu_kind = "shared"
+  cpus = 1
+  memory_mb = 512

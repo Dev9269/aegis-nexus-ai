@@ -154,9 +154,14 @@ def create_app() -> FastAPI:
 
     _frontend_dist = Path(os.environ.get("AEGIS_FRONTEND_DIST", "")).resolve() if os.environ.get("AEGIS_FRONTEND_DIST") else None
     if _frontend_dist is None:
-        _candidate = Path(__file__).resolve().parents[2] / "frontend" / "dist"
-        if _candidate.exists():
-            _frontend_dist = _candidate
+        for _candidate in (
+            Path(__file__).resolve().parents[2] / "frontend" / "dist",
+            Path("/app/frontend/dist"),
+            Path("/app/dist"),
+        ):
+            if _candidate.exists():
+                _frontend_dist = _candidate
+                break
 
     if _frontend_dist and _frontend_dist.exists():
         application.mount("/assets", StaticFiles(directory=str(_frontend_dist / "assets")), name="assets")
