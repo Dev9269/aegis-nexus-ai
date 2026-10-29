@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: aegis-nexus-ai
+    runtime: python
+    plan: free
+    buildCommand: |
+      cd frontend && VITE_API_BASE=/api VITE_WS_PATH=/api/ws/events npm install && VITE_API_BASE=/api VITE_WS_PATH=/api/ws/events npm run build && cd ../backend && python -m pip install -r requirements.txt && python -m scripts.train_model --rows 5000 --seed 42 && python -m scripts.seed_demo
+    startCommand: cd backend && python -m uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: AEGIS_ENVIRONMENT
+        value: production
+      - key: AEGIS_DEMO_MODE
+        value: "true"
+      - key: AEGIS_DEMO_PASSWORD
+        value: ChangeMe-Demo!2026
+      - key: AEGIS_COOKIE_SECURE
+        value: "true"
+      - key: AEGIS_DATABASE_URL
+        value: sqlite:///./aegis.db
+      - key: AEGIS_AUTO_CREATE_TABLES
+        value: "true"
+      - key: AEGIS_MODEL_ARTIFACT_DIR
+        value: ml/artifacts
+      - key: AEGIS_ALLOWED_ORIGINS
+        value: https://aegis-nexus-ai.onrender.com
+      - key: PYTHON_VERSION
+        value: "3.12.0"
+      - key: NODE_VERSION
+        value: "22"

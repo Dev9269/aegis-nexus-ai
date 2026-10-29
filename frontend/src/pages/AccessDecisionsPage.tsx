@@ -356,6 +356,29 @@ function AccessEvidence({ detail }: { detail: NonNullable<ReturnType<typeof useA
         <RiskGauge score={detail.risk_score} size={112} />
       </div>
 
+      {(detail as any).policy_trace && (detail as any).policy_trace.length > 0 && (
+        <section>
+          <h3 className="eyebrow mb-2">Zero-Trust Decision Trace</h3>
+          <p className="mb-2 text-[10px] text-faint">Policy evaluated first. ML anomaly scoring never overrides mandatory denials.</p>
+          <div className="space-y-2">
+            {(detail as any).policy_trace.map((step: any, idx: number) => (
+              <div key={idx} className="flex items-start gap-3 rounded-lg border border-line/65 bg-raised/30 p-3">
+                <div className="mt-0.5">
+                  <span className={cn("inline-flex h-6 w-6 items-center justify-center rounded-full text-xs", step.status === "deny" || step.status === "high" || step.status === "critical" ? "bg-critical/20 text-critical" : step.status === "warn" || step.status === "medium" ? "bg-medium/20 text-medium" : "bg-accent/20 text-accent")}>{idx + 1}</span>
+                </div>
+                <div className="flex-1">
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm font-medium text-ink">{step.step.replace(/_/g, " ")}</p>
+                    <Badge tone={step.status === "deny" || step.status === "high" || step.status === "critical" ? "critical" : step.status === "warn" || step.status === "medium" ? "medium" : "accent"}>{step.status}</Badge>
+                  </div>
+                  <p className="mt-1 text-[11px] leading-5 text-faint">{step.detail}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
       <section>
         <h3 className="eyebrow mb-2">Decision reasons</h3>
         <div className="space-y-2">

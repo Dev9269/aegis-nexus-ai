@@ -94,35 +94,41 @@ export function ActivityTimelineChart({ data }: { data: TimelinePoint[] }) {
             tickLine={false}
             allowDecimals={false}
           />
-          <Tooltip content={<ChartTooltip />} cursor={{ stroke: CHART_COLORS.accent, strokeOpacity: 0.2 }} />
+          <Tooltip content={<ChartTooltip />} cursor={{ stroke: CHART_COLORS.accent, strokeOpacity: 0.4 }} />
           <Area
-            type="monotone"
+            type="natural"
             dataKey="access_requests"
             name="Access requests"
             stroke={CHART_COLORS.accent}
             strokeWidth={2}
             fill="url(#accessFill)"
             dot={false}
-            activeDot={{ r: 3 }}
+            activeDot={{ r: 4 }}
+            isAnimationActive
+            animationDuration={900}
           />
           <Area
-            type="monotone"
+            type="natural"
             dataKey="security_events"
             name="Security events"
             stroke={CHART_COLORS.accent2}
-            strokeWidth={1.6}
+            strokeWidth={1.8}
             fill="url(#eventFill)"
             dot={false}
-            activeDot={{ r: 3 }}
+            activeDot={{ r: 4 }}
+            isAnimationActive
+            animationDuration={1000}
           />
           <Line
             type="monotone"
             dataKey="high_risk"
             name="High risk"
             stroke={CHART_COLORS.high}
-            strokeWidth={1.4}
-            strokeDasharray="4 4"
+            strokeWidth={1.6}
+            strokeDasharray="6 3"
             dot={false}
+            isAnimationActive
+            animationDuration={800}
           />
         </AreaChart>
       </ResponsiveContainer>
@@ -158,13 +164,15 @@ export function RiskHistoryChart({ data }: { data: RiskPoint[] }) {
           />
           <Tooltip content={<ChartTooltip valueSuffix=" / 100" />} />
           <Line
-            type="monotone"
+            type="natural"
             dataKey="risk_score"
             name="Risk index"
             stroke={CHART_COLORS.accent}
-            strokeWidth={2}
+            strokeWidth={2.2}
             dot={{ r: 2, fill: CHART_COLORS.accent, strokeWidth: 0 }}
-            activeDot={{ r: 4 }}
+            activeDot={{ r: 5 }}
+            isAnimationActive
+            animationDuration={900}
           />
         </LineChart>
       </ResponsiveContainer>
@@ -183,9 +191,11 @@ export function RiskDonut({ data }: { data: NamedCount[] }) {
             dataKey="value"
             nameKey="name"
             innerRadius={54}
-            outerRadius={76}
-            paddingAngle={3}
+            outerRadius={78}
+            paddingAngle={4}
             stroke="none"
+            isAnimationActive
+            animationDuration={900}
           >
             {data.map((entry) => (
               <Cell key={entry.name} fill={RISK_COLORS[entry.name] ?? CHART_COLORS.line} />
@@ -226,7 +236,7 @@ export function DecisionBars({ data }: { data: NamedCount[] }) {
             allowDecimals={false}
           />
           <Tooltip content={<ChartTooltip />} cursor={{ fill: CHART_COLORS.line, fillOpacity: 0.2 }} />
-          <Bar dataKey="value" name="Decisions" radius={[5, 5, 0, 0]}>
+          <Bar dataKey="value" name="Decisions" radius={[5, 5, 0, 0]} maxBarSize={26} isAnimationActive animationDuration={900}>
             {data.map((entry) => (
               <Cell key={entry.name} fill={DECISION_COLORS[entry.name] ?? CHART_COLORS.accent} />
             ))}

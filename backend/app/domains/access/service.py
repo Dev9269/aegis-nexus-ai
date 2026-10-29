@@ -148,6 +148,15 @@ def evaluate_access_request(
     db.commit()
 
     request_row = outcome.access_request
+    trace = [
+        {"step": "authentication", "status": "ok", "detail": f"Actor {auth.identity.email} authenticated"},
+        {"step": "identity", "status": "ok" if subject.status == "ACTIVE" else "deny", "detail": f"Subject {subject.email} status={subject.status}, role={subject.role}"},
+        {"step": "resource", "status": "ok" if resource.is_active else "deny", "detail": f"{resource.key} ({resource.sensitivity}), active={resource.is_active}"},
+        {"step": "device", "status": "ok" if device and device.identity_id == subject.id and device.state != "REVOKED" else ("warn" if not device else "deny"), "detail": device.name if device else "No device provided"},
+        {"step": "policy", "status": request_row.decision, "detail": f"Policy {request_row.policy_version} evaluated"},
+        {"step": "ml_anomaly", "status": request_row.risk_category.lower(), "detail": f"Risk {request_row.risk_score:.1f} / Anom {request_row.anomaly_score:.4f}"},
+        {"step": "final_decision", "status": request_row.decision.lower(), "detail": f"{request_row.decision} - policy overrides AI"},
+    ]
     return DecisionOut(
         request_id=request_row.id,
         identity_id=request_row.identity_id,
@@ -163,6 +172,7 @@ def evaluate_access_request(
         timestamp=request_row.created_at,
         correlation_id=request_row.correlation_id,
         is_simulated=request_row.is_simulated,
+        policy_trace=trace,
     )
 
 

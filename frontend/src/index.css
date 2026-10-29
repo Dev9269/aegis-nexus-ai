@@ -3,36 +3,36 @@
 @tailwind utilities;
 
 :root {
-  --canvas: 6 10 19;
-  --surface: 11 18 32;
-  --raised: 16 26 44;
-  --line: 34 49 74;
-  --text: 232 240 250;
-  --muted: 145 161 185;
-  --faint: 94 112 138;
-  --accent: 45 212 238;
-  --accent-2: 139 92 246;
-  --low: 52 211 153;
-  --medium: 245 177 45;
-  --high: 251 146 60;
-  --critical: 251 93 119;
+  --canvas: 10 16 28;
+  --surface: 18 26 42;
+  --raised: 28 36 56;
+  --line: 58 82 118;
+  --text: 248 249 250;
+  --muted: 186 198 224;
+  --faint: 138 154 190;
+  --accent: 0 191 255;
+  --accent-2: 0 255 198;
+  --low: 0 255 198;
+  --medium: 255 234 0;
+  --high: 255 111 32;
+  --critical: 255 59 92;
   color-scheme: dark;
 }
 
 [data-theme="light"] {
-  --canvas: 242 246 252;
+  --canvas: 246 249 255;
   --surface: 255 255 255;
-  --raised: 248 250 254;
-  --line: 214 224 238;
-  --text: 19 32 52;
-  --muted: 84 102 128;
-  --faint: 126 144 168;
-  --accent: 8 145 178;
-  --accent-2: 109 40 217;
-  --low: 5 150 105;
-  --medium: 180 120 8;
-  --high: 194 90 12;
-  --critical: 190 35 66;
+  --raised: 240 246 255;
+  --line: 168 196 236;
+  --text: 24 36 62;
+  --muted: 72 92 134;
+  --faint: 108 132 178;
+  --accent: 0 140 255;
+  --accent-2: 0 190 165;
+  --low: 0 190 165;
+  --medium: 212 186 0;
+  --high: 232 98 24;
+  --critical: 224 44 78;
   color-scheme: light;
 }
 
@@ -43,6 +43,7 @@
 html {
   min-height: 100%;
   background: rgb(var(--canvas));
+  animation: flicker 8s infinite;
 }
 
 body {
@@ -63,15 +64,37 @@ body::before {
   content: "";
   pointer-events: none;
   background:
-    radial-gradient(ellipse 60% 42% at 14% -8%, rgb(var(--accent) / 0.13), transparent 58%),
-    radial-gradient(ellipse 54% 45% at 100% 0%, rgb(var(--accent-2) / 0.14), transparent 62%),
-    radial-gradient(ellipse 40% 42% at 52% 105%, rgb(var(--accent) / 0.06), transparent 64%);
+    radial-gradient(ellipse 68% 42% at 16% -10%, rgb(0 191 255 / 0.28), transparent 58%),
+    radial-gradient(ellipse 60% 48% at 100% 0%, rgb(0 255 198 / 0.24), transparent 62%),
+    radial-gradient(ellipse 46% 44% at 52% 108%, rgb(255 59 92 / 0.16), transparent 66%),
+    conic-gradient(from 220deg at 50% 10%, transparent 0deg, rgb(0 191 255 / 0.12) 60deg, transparent 120deg);
+  filter: blur(0px);
+  animation: hue-pulse 4.8s ease-in-out infinite;
 }
 
 [data-theme="light"] body::before {
   background:
-    radial-gradient(ellipse 55% 40% at 10% -5%, rgb(var(--accent) / 0.1), transparent 60%),
-    radial-gradient(ellipse 48% 40% at 100% 0%, rgb(var(--accent-2) / 0.1), transparent 62%);
+    radial-gradient(ellipse 64% 38% at 14% -6%, rgb(0 140 255 / 0.16), transparent 60%),
+    radial-gradient(ellipse 54% 42% at 100% 0%, rgb(0 190 165 / 0.14), transparent 64%);
+}
+
+@keyframes flicker {
+  0%,
+  19%,
+  21%,
+  23%,
+  25%,
+  54%,
+  56%,
+  100% {
+    opacity: 1;
+  }
+  20%,
+  22%,
+  24%,
+  55% {
+    opacity: 0.4;
+  }
 }
 
 body::after {
@@ -80,16 +103,30 @@ body::after {
   z-index: -1;
   content: "";
   pointer-events: none;
-  opacity: 0.16;
+  opacity: 0.22;
   background-image:
-    linear-gradient(rgb(var(--line) / 0.28) 1px, transparent 1px),
-    linear-gradient(90deg, rgb(var(--line) / 0.28) 1px, transparent 1px);
-  background-size: 64px 64px;
-  mask-image: radial-gradient(ellipse 85% 70% at 50% 20%, black, transparent 78%);
+    linear-gradient(rgb(var(--accent) / 0.22) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(var(--accent-2) / 0.16) 1px, transparent 1px),
+    repeating-linear-gradient(0deg, transparent 0 3px, rgb(var(--accent) / 0.08) 3px 4px);
+  background-size: 48px 48px, 48px 48px, 100% 4px;
+  animation: grid-shift 6s linear infinite;
+  mix-blend-mode: screen;
+  mask-image: radial-gradient(ellipse 90% 72% at 50% 18%, black, transparent 80%);
 }
 
 [data-theme="light"] body::after {
-  opacity: 0.38;
+  opacity: 0.24;
+  mix-blend-mode: multiply;
+  animation-duration: 10s;
+}
+
+@keyframes grid-shift {
+  0% {
+    background-position: 0 0, 0 0, 0 0;
+  }
+  100% {
+    background-position: 48px 24px, -24px 48px, 0 40px;
+  }
 }
 
 ::selection {
@@ -288,13 +325,58 @@ a {
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    scroll-behavior: auto !important;
-    transition-duration: 0.01ms !important;
+.recharts-cartesian-grid-horizontal line,
+.recharts-cartesian-grid-vertical line {
+  stroke: rgb(var(--accent) / 0.25);
+  stroke-dasharray: 2 4;
+}
+
+.recharts-line-curve,
+.recharts-area-curve {
+  filter: drop-shadow(0 0 6px rgb(var(--accent) / 0.45));
+}
+
+.recharts-line-curve[stroke*="var(--accent-2)"],
+.recharts-line-curve[stroke*="accent-2"] {
+  filter: drop-shadow(0 0 6px rgb(var(--accent-2) / 0.4));
+}
+
+.recharts-line-curve[stroke*="high"] {
+  filter: drop-shadow(0 0 8px rgb(var(--high) / 0.6));
+  animation: chart-flicker 2.2s ease-in-out infinite;
+}
+
+.recharts-active-dot {
+  filter: drop-shadow(0 0 10px rgb(var(--accent) / 0.8));
+}
+
+.recharts-tooltip-cursor {
+  stroke: rgb(var(--accent) / 0.6);
+  filter: drop-shadow(0 0 6px rgb(var(--accent) / 0.5));
+}
+
+@keyframes chart-flicker {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  25% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 0.9;
+  }
+  75% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes chart-glow {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 4px rgb(var(--accent) / 0.4));
+  }
+  50% {
+    filter: drop-shadow(0 0 10px rgb(var(--accent) / 0.7));
   }
 }

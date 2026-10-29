@@ -39,7 +39,7 @@ export default {
         mono: ['"Cascadia Code"', '"SFMono-Regular"', "Consolas", "monospace"],
       },
       boxShadow: {
-        glow: "0 0 0 1px rgb(var(--accent) / 0.2), 0 18px 60px -24px rgb(var(--accent) / 0.45)",
+        glow: "0 0 0 1px rgb(var(--accent) / 0.25), 0 20px 70px -22px rgb(var(--accent) / 0.55), 0 0 80px -40px rgb(var(--accent-2) / 0.45)",
         panel: "0 24px 70px -32px rgb(0 0 0 / 0.65)",
       },
       keyframes: {

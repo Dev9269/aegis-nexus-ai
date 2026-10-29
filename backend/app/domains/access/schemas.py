@@ -63,6 +63,12 @@ class EvaluateAccessIn(BaseModel):
     simulate: bool = False
 
 
+class PolicyTraceStep(BaseModel):
+    step: str
+    status: str
+    detail: str
+
+
 class DecisionOut(BaseModel):
     request_id: str
     identity_id: str
@@ -78,3 +84,4 @@ class DecisionOut(BaseModel):
     timestamp: datetime
     correlation_id: str
     is_simulated: bool
+    policy_trace: list[dict[str, Any]] = Field(default_factory=list)

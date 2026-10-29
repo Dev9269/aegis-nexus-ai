@@ -147,6 +147,27 @@ def create_app() -> FastAPI:
 
     application.include_router(api_router)
 
+    import os
+    from pathlib import Path
+    from fastapi.responses import FileResponse
+    from fastapi.staticfiles import StaticFiles
+
+    _frontend_dist = Path(os.environ.get("AEGIS_FRONTEND_DIST", "")).resolve() if os.environ.get("AEGIS_FRONTEND_DIST") else None
+    if _frontend_dist is None:
+        _candidate = Path(__file__).resolve().parents[2] / "frontend" / "dist"
+        if _candidate.exists():
+            _frontend_dist = _candidate
+
+    if _frontend_dist and _frontend_dist.exists():
+        application.mount("/assets", StaticFiles(directory=str(_frontend_dist / "assets")), name="assets")
+
+        @application.get("/{full_path:path}", include_in_schema=False)
+        async def _spa_fallback(full_path: str):
+            target = _frontend_dist / full_path
+            if target.is_file():
+                return FileResponse(str(target))
+            return FileResponse(str(_frontend_dist / "index.html"))
+
     return application
 
 

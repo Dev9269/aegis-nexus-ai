@@ -478,6 +478,12 @@ export interface EvaluateAccessPayload {
   simulate?: boolean;
 }
 
+export interface PolicyTraceStep {
+  step: string;
+  status: string;
+  detail: string;
+}
+
 export interface DecisionResult {
   request_id: string;
   identity_id: string;
@@ -493,6 +499,7 @@ export interface DecisionResult {
   timestamp: string;
   correlation_id: string;
   is_simulated: boolean;
+  policy_trace?: PolicyTraceStep[];
 }
 
 export interface DeviceEnrollPayload {
