@@ -34,6 +34,10 @@ import type {
   ScenarioId,
   DeviceState,
   ComplianceReport,
+  LeakFinding,
+  RedTeamRunOut,
+  RedTeamScenario,
+  ThreatIntelSummary,
 } from "../types/api";
 
 import { buildQuery, download, request } from "../lib/http";
@@ -120,6 +124,18 @@ export const api = {
   modelEvaluation: () => request<ModelEvaluation>("/model/evaluation"),
   modelFeatures: () => request<FeatureMetadata[]>("/model/features"),
   complianceReport: (framework?: string) => request<ComplianceReport>(`/compliance/report${buildQuery({ framework })}`),
+
+  threatIntelFindings: (params?: { status?: string; severity?: string; identity_id?: string }) =>
+    request<LeakFinding[]>(`/threat-intel/findings${buildQuery(params ?? {})}`),
+  threatIntelSummary: () => request<ThreatIntelSummary>("/threat-intel/summary"),
+  simulateLeak: (identityId?: string) =>
+    request<{ finding: LeakFinding; incident_id: string | null; message: string }>(`/threat-intel/simulate${buildQuery({ identity_id: identityId })}`, { method: "POST" }),
+  updateLeakFinding: (findingId: string, status: string) =>
+    request<LeakFinding>(`/threat-intel/findings/${findingId}`, { method: "PATCH", body: { status } }),
+
+  redTeamScenarios: () => request<RedTeamScenario[]>("/red-team/scenarios"),
+  runRedTeam: (scenario?: string) =>
+    request<RedTeamRunOut>(`/red-team/run${buildQuery({ scenario })}`, { method: "POST" }),
   retrainModel: (seed: number, rows: number) =>
     request<ModelEvaluation>(`/model/retrain${buildQuery({ seed, rows })}`, {
       method: "POST",

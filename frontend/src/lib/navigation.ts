@@ -1,6 +1,8 @@
 import {
   Activity,
   BookLock,
+  Bug,
+  Globe,
   ClipboardCheck,
   Boxes,
   Fingerprint,
@@ -113,6 +115,22 @@ export const NAV_ITEMS: NavItem[] = [
     description: "Append-only hash-chain evidence",
     icon: BookLock,
     group: "Assurance",
+    roles: ["SECURITY_ADMIN", "SECURITY_ANALYST", "AUDITOR"],
+  },
+  {
+    to: "/red-team",
+    label: "Red team",
+    description: "Attack simulation and defense validation",
+    icon: Bug,
+    group: "Detect",
+    roles: ["SECURITY_ADMIN", "SECURITY_ANALYST", "AUDITOR"],
+  },
+  {
+    to: "/threat-intel",
+    label: "Threat intel",
+    description: "Dark-web leak and exposure monitoring",
+    icon: Globe,
+    group: "Detect",
     roles: ["SECURITY_ADMIN", "SECURITY_ANALYST", "AUDITOR"],
   },
   {

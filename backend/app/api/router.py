@@ -14,7 +14,9 @@ from app.domains.incidents.router import router as incidents_router
 from app.domains.model.router import router as model_router
 from app.domains.overview.router import router as overview_router
 from app.domains.policies.router import router as policies_router
+from app.domains.redteam.router import router as redteam_router
 from app.domains.system.router import router as system_router
+from app.domains.threatintel.router import router as threatintel_router
 
 router = APIRouter()
 for child in (
@@ -30,6 +32,8 @@ for child in (
     model_router,
     audit_router,
     compliance_router,
+    redteam_router,
+    threatintel_router,
     demo_router,
 ):
     router.include_router(child, prefix="/api")

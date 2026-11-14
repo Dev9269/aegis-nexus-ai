@@ -66,6 +66,12 @@ EXPECTED = {
     "/api/demo/run": {"post": "run_all_demo_scenarios_api_demo_run_post"},
     "/api/demo/reset": {"post": "reset_demo_api_demo_reset_post"},
     "/api/compliance/report": {"get": "compliance_report_api_compliance_report_get"},
+    "/api/red-team/scenarios": {"get": "get_red_team_scenarios_api_red_team_scenarios_get"},
+    "/api/red-team/run": {"post": "run_red_team_endpoint_api_red_team_run_post"},
+    "/api/threat-intel/findings": {"get": "list_leak_findings_api_threat_intel_findings_get"},
+    "/api/threat-intel/findings/{finding_id}": {"patch": "update_leak_finding_api_threat_intel_findings__finding_id__patch"},
+    "/api/threat-intel/simulate": {"post": "simulate_leak_finding_api_threat_intel_simulate_post"},
+    "/api/threat-intel/summary": {"get": "threat_intel_summary_api_threat_intel_summary_get"},
 }
 
 

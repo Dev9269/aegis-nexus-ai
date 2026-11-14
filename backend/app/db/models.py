@@ -1,4 +1,4 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 
 import uuid
 from datetime import datetime, timezone
@@ -304,6 +304,22 @@ class AuditLog(Base):
     record_hash: Mapped[str] = mapped_column(String(64), nullable=False, unique=True)
 
 
+
+class LeakFinding(Base):
+    __tablename__ = "leak_findings"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=new_id)
+    identity_id: Mapped[str | None] = mapped_column(String(36), nullable=True, index=True)
+    source_type: Mapped[str] = mapped_column(String(40), nullable=False, index=True)
+    source_name: Mapped[str] = mapped_column(String(160), nullable=False)
+    severity: Mapped[str] = mapped_column(String(16), default=Severity.MEDIUM.value, index=True)
+    matched_field: Mapped[str] = mapped_column(String(60), nullable=False)
+    leaked_value_masked: Mapped[str] = mapped_column(String(120), nullable=False)
+    first_seen: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, index=True)
+    last_seen: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
+    status: Mapped[str] = mapped_column(String(20), default="NEW", index=True)
+    remediation: Mapped[str] = mapped_column(Text, nullable=False, default="")
+    is_simulated: Mapped[bool] = mapped_column(Boolean, default=False, index=True)
 @event.listens_for(AuditLog, "before_update")
 def _prevent_audit_update(mapper: Any, connection: Any, target: AuditLog) -> None:
     raise ValueError("Audit records are append-only and cannot be updated")
