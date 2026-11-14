@@ -14,6 +14,7 @@ const IdentityPage = lazy(() => import("../pages/IdentityPage"));
 const IdentityDetailPage = lazy(() => import("../pages/IdentityDetailPage"));
 const BehaviorPage = lazy(() => import("../pages/BehaviorPage"));
 const IncidentsPage = lazy(() => import("../pages/IncidentsPage"));
+const CopilotPage = lazy(() => import("../pages/CopilotPage"));
 const TimelinePage = lazy(() => import("../pages/TimelinePage"));
 const DevicesPage = lazy(() => import("../pages/DevicesPage"));
 const PoliciesPage = lazy(() => import("../pages/PoliciesPage"));
@@ -86,6 +87,7 @@ export function AppRouter() {
             <Route path="/identities" element={<IdentityPage />} />
             <Route path="/behavior" element={<BehaviorPage />} />
             <Route path="/incidents" element={<IncidentsPage />} />
+            <Route path="/copilot" element={<CopilotPage />} />
             <Route path="/events" element={<TimelinePage />} />
             <Route path="/devices" element={<DevicesPage />} />
             <Route path="/policies" element={<PoliciesPage />} />

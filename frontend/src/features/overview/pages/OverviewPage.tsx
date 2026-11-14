@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { RefreshCw } from "lucide-react";
+import { RefreshCw, FileDown } from "lucide-react";
 import { Badge, Button, ErrorState, LoadingPanel, PageHeader } from "../../../components/ui";
+import { api, messageFromError } from "../../../services/api";
 import { RANGE_OPTIONS } from "../../../lib/constants";
 import { cn, formatRelativeTime } from "../../../lib/utils";
 import { useAuth } from "../../auth/useAuth";
+import { useToast } from "../../../hooks/useToast";
 import { MetricGrid } from "../components/MetricGrid";
 import { OverviewCharts } from "../components/OverviewCharts";
 import { OverviewQueues } from "../components/OverviewQueues";
@@ -16,7 +18,16 @@ export default function OverviewPage() {
   const { me } = useAuth();
   const [range, setRange] = useState(24);
   const queryClient = useQueryClient();
+  const toast = useToast();
   const overview = useOverview(range);
+
+  const downloadExecutiveReport = async () => {
+    try {
+      await api.downloadExecutiveReport();
+    } catch (error) {
+      toast.error("Report failed", messageFromError(error));
+    }
+  };
 
   if (overview.isError) {
     return (
@@ -89,6 +100,14 @@ export default function OverviewPage() {
             >
               <RefreshCw size={13} />
               Refresh
+            </Button>
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={() => void downloadExecutiveReport()}
+            >
+              <FileDown size={13} />
+              Executive PDF
             </Button>
           </>
         }

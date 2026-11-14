@@ -208,6 +208,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/copilot/ask": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Ask Copilot */
+        post: operations["ask_copilot_api_copilot_ask_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/demo/reset": {
         parameters: {
             query?: never;
@@ -618,6 +635,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/reports/executive": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Executive Report */
+        get: operations["executive_report_api_reports_executive_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/reports/executive.pdf": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Executive Report Pdf */
+        get: operations["executive_report_pdf_api_reports_executive_pdf_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/resources": {
         parameters: {
             query?: never;
@@ -679,6 +730,40 @@ export interface paths {
         get?: never;
         /** Update Policy */
         put: operations["update_policy_api_resources__resource_id__policy_put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/response/incidents/{incident_id}/actions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Run Playbook */
+        post: operations["run_playbook_api_response_incidents__incident_id__actions_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/response/playbooks": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Playbooks */
+        get: operations["list_playbooks_api_response_playbooks_get"];
+        put?: never;
         post?: never;
         delete?: never;
         options?: never;
@@ -1006,6 +1091,33 @@ export interface components {
             /** True Positive */
             true_positive: number;
         };
+        /** CopilotAnswer */
+        CopilotAnswer: {
+            /** Answer */
+            answer: string;
+            /** Bullets */
+            bullets: string[];
+            /** Data */
+            data: {
+                [key: string]: unknown;
+            };
+            /** Intent */
+            intent: string;
+            /** Question */
+            question: string;
+            /**
+             * Read Only
+             * @default true
+             */
+            read_only: boolean;
+            /** Suggestions */
+            suggestions: string[];
+        };
+        /** CopilotQuestion */
+        CopilotQuestion: {
+            /** Question */
+            question: string;
+        };
         /** DecisionOut */
         DecisionOut: {
             /** Anomaly Score */
@@ -1219,6 +1331,21 @@ export interface components {
              * @default false
              */
             simulate: boolean;
+        };
+        /** ExecutiveReport */
+        ExecutiveReport: {
+            /** Generated At */
+            generated_at: string;
+            /** Headline */
+            headline: string;
+            /** Highlights */
+            highlights: string[];
+            /** Organization */
+            organization: string;
+            /** Overall Risk */
+            overall_risk: string;
+            /** Sections */
+            sections: components["schemas"]["ReportSection"][];
         };
         /** HTTPValidationError */
         HTTPValidationError: {
@@ -1705,6 +1832,72 @@ export interface components {
             /** Total */
             total: number;
         };
+        /** PlaybookActionInfo */
+        PlaybookActionInfo: {
+            /** Description */
+            description: string;
+            /**
+             * Id
+             * @enum {string}
+             */
+            id: "DISABLE_IDENTITY" | "REVOKE_SESSIONS" | "ROTATE_CREDENTIALS" | "RESTRICT_DEVICES" | "CONTAIN_INCIDENT";
+            /** Label */
+            label: string;
+            /** Reversible */
+            reversible: boolean;
+            /** Severity */
+            severity: string;
+        };
+        /** PlaybookActionOutcome */
+        PlaybookActionOutcome: {
+            /**
+             * Action
+             * @enum {string}
+             */
+            action: "DISABLE_IDENTITY" | "REVOKE_SESSIONS" | "ROTATE_CREDENTIALS" | "RESTRICT_DEVICES" | "CONTAIN_INCIDENT";
+            /** Detail */
+            detail: string;
+            /** Label */
+            label: string;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "APPLIED" | "SKIPPED" | "FAILED";
+        };
+        /** PlaybookCatalog */
+        PlaybookCatalog: {
+            /** Actions */
+            actions: components["schemas"]["PlaybookActionInfo"][];
+            /** Note */
+            note: string;
+        };
+        /** PlaybookRequest */
+        PlaybookRequest: {
+            /** Actions */
+            actions: ("DISABLE_IDENTITY" | "REVOKE_SESSIONS" | "ROTATE_CREDENTIALS" | "RESTRICT_DEVICES" | "CONTAIN_INCIDENT")[];
+            /** Reason */
+            reason: string;
+        };
+        /** PlaybookResult */
+        PlaybookResult: {
+            /** Applied Count */
+            applied_count: number;
+            /** Correlation Id */
+            correlation_id: string;
+            /** Identity Id */
+            identity_id: string | null;
+            /** Identity Status */
+            identity_status: string | null;
+            /** Incident Id */
+            incident_id: string;
+            /** Incident Status */
+            incident_status: string;
+            /** Outcomes */
+            outcomes: components["schemas"]["PlaybookActionOutcome"][];
+            /** Summary */
+            summary: string;
+        };
         /** PolicyOut */
         PolicyOut: {
             /** Allowed Device States */
@@ -1885,6 +2078,25 @@ export interface components {
             scenario: components["schemas"]["RedTeamScenario"];
             /** Total Count */
             total_count: number;
+        };
+        /** ReportMetric */
+        ReportMetric: {
+            /** Label */
+            label: string;
+            /** Value */
+            value: string;
+        };
+        /** ReportSection */
+        ReportSection: {
+            /**
+             * Bullets
+             * @default []
+             */
+            bullets: string[];
+            /** Metrics */
+            metrics: components["schemas"]["ReportMetric"][];
+            /** Title */
+            title: string;
         };
         /** ResourcePolicyOut */
         ResourcePolicyOut: {
@@ -2418,6 +2630,39 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ComplianceReport"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    ask_copilot_api_copilot_ask_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CopilotQuestion"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CopilotAnswer"];
                 };
             };
             /** @description Validation Error */
@@ -3172,6 +3417,46 @@ export interface operations {
             };
         };
     };
+    executive_report_api_reports_executive_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ExecutiveReport"];
+                };
+            };
+        };
+    };
+    executive_report_pdf_api_reports_executive_pdf_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
     list_resources_api_resources_get: {
         parameters: {
             query?: {
@@ -3297,6 +3582,61 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    run_playbook_api_response_incidents__incident_id__actions_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                incident_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PlaybookRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlaybookResult"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_playbooks_api_response_playbooks_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlaybookCatalog"];
                 };
             };
         };
