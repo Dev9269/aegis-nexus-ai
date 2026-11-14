@@ -21,15 +21,15 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/access-requests": {
+    "/api/health": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        /** List Access Requests */
-        get: operations["list_access_requests_api_access_requests_get"];
+        /** Health */
+        get: operations["health_api_health_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -38,32 +38,15 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/access-requests/evaluate": {
+    "/api/health/ready": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get?: never;
-        put?: never;
-        /** Evaluate Access Request */
-        post: operations["evaluate_access_request_api_access_requests_evaluate_post"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/access-requests/export.csv": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Export Access Requests */
-        get: operations["export_access_requests_api_access_requests_export_csv_get"];
+        /** Readiness */
+        get: operations["readiness_api_health_ready_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -72,15 +55,15 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/access-requests/{request_id}": {
+    "/api/health/detailed": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        /** Get Access Request */
-        get: operations["get_access_request_api_access_requests__request_id__get"];
+        /** Detailed Health */
+        get: operations["detailed_health_api_health_detailed_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -89,49 +72,15 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/audit": {
+    "/api/settings/info": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        /** List Audit */
-        get: operations["list_audit_api_audit_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/audit/export.csv": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Export Audit */
-        get: operations["export_audit_api_audit_export_csv_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/audit/verify": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Verify Chain */
-        get: operations["verify_chain_api_audit_verify_get"];
+        /** Settings Info */
+        get: operations["settings_info_api_settings_info_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -157,23 +106,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/auth/logout": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Logout */
-        post: operations["logout_api_auth_logout_post"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/auth/me": {
         parameters: {
             query?: never;
@@ -191,7 +123,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/demo/reset": {
+    "/api/auth/logout": {
         parameters: {
             query?: never;
             header?: never;
@@ -200,40 +132,23 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Reset Demo */
-        post: operations["reset_demo_api_demo_reset_post"];
+        /** Logout */
+        post: operations["logout_api_auth_logout_post"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/demo/run": {
+    "/api/identities": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get?: never;
-        put?: never;
-        /** Run All Demo Scenarios */
-        post: operations["run_all_demo_scenarios_api_demo_run_post"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/demo/scenarios": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get Demo Scenarios */
-        get: operations["get_demo_scenarios_api_demo_scenarios_get"];
+        /** List Identities */
+        get: operations["list_identities_api_identities_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -242,17 +157,17 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/demo/scenarios/{scenario}": {
+    "/api/identities/{identity_id}": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        /** Get Identity */
+        get: operations["get_identity_api_identities__identity_id__get"];
         put?: never;
-        /** Run Demo Scenario */
-        post: operations["run_demo_scenario_api_demo_scenarios__scenario__post"];
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -294,15 +209,15 @@ export interface paths {
         patch: operations["update_device_state_api_devices__device_id__state_patch"];
         trace?: never;
     };
-    "/api/events": {
+    "/api/access-requests": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        /** List Events */
-        get: operations["list_events_api_events_get"];
+        /** List Access Requests */
+        get: operations["list_access_requests_api_access_requests_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -311,15 +226,15 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/events/{event_id}": {
+    "/api/access-requests/export.csv": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        /** Get Event */
-        get: operations["get_event_api_events__event_id__get"];
+        /** Export Access Requests */
+        get: operations["export_access_requests_api_access_requests_export_csv_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -328,127 +243,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/health": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Health */
-        get: operations["health_api_health_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/health/detailed": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Detailed Health */
-        get: operations["detailed_health_api_health_detailed_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/health/ready": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Readiness */
-        get: operations["readiness_api_health_ready_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/identities": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** List Identities */
-        get: operations["list_identities_api_identities_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/identities/{identity_id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get Identity */
-        get: operations["get_identity_api_identities__identity_id__get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/incidents": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** List Incidents */
-        get: operations["list_incidents_api_incidents_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/incidents/{incident_id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get Incident */
-        get: operations["get_incident_api_incidents__incident_id__get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        /** Update Incident */
-        patch: operations["update_incident_api_incidents__incident_id__patch"];
-        trace?: never;
-    };
-    "/api/incidents/{incident_id}/notes": {
+    "/api/access-requests/evaluate": {
         parameters: {
             query?: never;
             header?: never;
@@ -457,110 +252,25 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Add Incident Note */
-        post: operations["add_incident_note_api_incidents__incident_id__notes_post"];
+        /** Evaluate Access Request */
+        post: operations["evaluate_access_request_api_access_requests_evaluate_post"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/model/evaluation": {
+    "/api/access-requests/{request_id}": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        /** Model Evaluation */
-        get: operations["model_evaluation_api_model_evaluation_get"];
+        /** Get Access Request */
+        get: operations["get_access_request_api_access_requests__request_id__get"];
         put?: never;
         post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/model/features": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Model Features */
-        get: operations["model_features_api_model_features_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/model/retrain": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Retrain Model */
-        post: operations["retrain_model_api_model_retrain_post"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/notifications": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** List Notifications */
-        get: operations["list_notifications_api_notifications_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/overview": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get Overview */
-        get: operations["get_overview_api_overview_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/policies/preview": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Preview Policy */
-        post: operations["preview_policy_api_policies_preview_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -635,17 +345,324 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/settings/info": {
+    "/api/policies/preview": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        /** Settings Info */
-        get: operations["settings_info_api_settings_info_get"];
+        get?: never;
+        put?: never;
+        /** Preview Policy */
+        post: operations["preview_policy_api_policies_preview_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/events": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Events */
+        get: operations["list_events_api_events_get"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/events/{event_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Event */
+        get: operations["get_event_api_events__event_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/notifications": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Notifications */
+        get: operations["list_notifications_api_notifications_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/incidents": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Incidents */
+        get: operations["list_incidents_api_incidents_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/incidents/{incident_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Incident */
+        get: operations["get_incident_api_incidents__incident_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Update Incident */
+        patch: operations["update_incident_api_incidents__incident_id__patch"];
+        trace?: never;
+    };
+    "/api/incidents/{incident_id}/notes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Add Incident Note */
+        post: operations["add_incident_note_api_incidents__incident_id__notes_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/overview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Overview */
+        get: operations["get_overview_api_overview_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/model/evaluation": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Model Evaluation */
+        get: operations["model_evaluation_api_model_evaluation_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/model/features": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Model Features */
+        get: operations["model_features_api_model_features_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/model/retrain": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Retrain Model */
+        post: operations["retrain_model_api_model_retrain_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/audit": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Audit */
+        get: operations["list_audit_api_audit_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/audit/verify": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Verify Chain */
+        get: operations["verify_chain_api_audit_verify_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/audit/export.csv": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Export Audit */
+        get: operations["export_audit_api_audit_export_csv_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/compliance/report": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Compliance Report */
+        get: operations["compliance_report_api_compliance_report_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/demo/scenarios": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Demo Scenarios */
+        get: operations["get_demo_scenarios_api_demo_scenarios_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/demo/scenarios/{scenario}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Run Demo Scenario */
+        post: operations["run_demo_scenario_api_demo_scenarios__scenario__post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/demo/run": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Run All Demo Scenarios */
+        post: operations["run_all_demo_scenarios_api_demo_run_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/demo/reset": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Reset Demo */
+        post: operations["reset_demo_api_demo_reset_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -658,21 +675,53 @@ export interface components {
     schemas: {
         /** AccessRequestDetail */
         AccessRequestDetail: {
+            /** Id */
+            id: string;
+            /** Identity Id */
+            identity_id: string;
+            /** Identity Name */
+            identity_name: string;
+            /** Identity Email */
+            identity_email: string;
+            /** Resource Id */
+            resource_id: string;
+            /** Resource Name */
+            resource_name: string;
+            /** Resource Key */
+            resource_key: string;
+            /** Device Id */
+            device_id: string | null;
+            /** Device Name */
+            device_name: string | null;
+            /** Requested Action */
+            requested_action: string;
+            /** Decision */
+            decision: string;
+            /** Risk Score */
+            risk_score: number;
+            /** Risk Category */
+            risk_category: string;
             /** Anomaly Score */
             anomaly_score: number;
-            /** Correlation Id */
-            correlation_id: string;
+            /** Policy Version */
+            policy_version: string;
+            /** Recommended Action */
+            recommended_action: string;
             /**
              * Created At
              * Format: date-time
              */
             created_at: string;
-            /** Decision */
-            decision: string;
-            /** Device Id */
-            device_id: string | null;
-            /** Device Name */
-            device_name: string | null;
+            /** Is Simulated */
+            is_simulated: boolean;
+            /** Reasons */
+            reasons: {
+                [key: string]: unknown;
+            }[];
+            /** Correlation Id */
+            correlation_id: string;
+            /** Model Version */
+            model_version?: string | null;
             /** Feature Summary */
             feature_summary?: {
                 [key: string]: unknown;
@@ -681,196 +730,198 @@ export interface components {
             features?: {
                 [key: string]: unknown;
             };
+        };
+        /** AccessRequestOut */
+        AccessRequestOut: {
             /** Id */
             id: string;
-            /** Identity Email */
-            identity_email: string;
             /** Identity Id */
             identity_id: string;
             /** Identity Name */
             identity_name: string;
-            /** Is Simulated */
-            is_simulated: boolean;
-            /** Model Version */
-            model_version?: string | null;
-            /** Policy Version */
-            policy_version: string;
-            /** Reasons */
-            reasons: {
-                [key: string]: unknown;
-            }[];
-            /** Recommended Action */
-            recommended_action: string;
-            /** Requested Action */
-            requested_action: string;
+            /** Identity Email */
+            identity_email: string;
             /** Resource Id */
             resource_id: string;
-            /** Resource Key */
-            resource_key: string;
             /** Resource Name */
             resource_name: string;
-            /** Risk Category */
-            risk_category: string;
+            /** Resource Key */
+            resource_key: string;
+            /** Device Id */
+            device_id: string | null;
+            /** Device Name */
+            device_name: string | null;
+            /** Requested Action */
+            requested_action: string;
+            /** Decision */
+            decision: string;
             /** Risk Score */
             risk_score: number;
-        };
-        /** AccessRequestOut */
-        AccessRequestOut: {
+            /** Risk Category */
+            risk_category: string;
             /** Anomaly Score */
             anomaly_score: number;
+            /** Policy Version */
+            policy_version: string;
+            /** Recommended Action */
+            recommended_action: string;
             /**
              * Created At
              * Format: date-time
              */
             created_at: string;
-            /** Decision */
-            decision: string;
-            /** Device Id */
-            device_id: string | null;
-            /** Device Name */
-            device_name: string | null;
-            /** Id */
-            id: string;
-            /** Identity Email */
-            identity_email: string;
-            /** Identity Id */
-            identity_id: string;
-            /** Identity Name */
-            identity_name: string;
             /** Is Simulated */
             is_simulated: boolean;
-            /** Policy Version */
-            policy_version: string;
-            /** Recommended Action */
-            recommended_action: string;
-            /** Requested Action */
-            requested_action: string;
-            /** Resource Id */
-            resource_id: string;
-            /** Resource Key */
-            resource_key: string;
-            /** Resource Name */
-            resource_name: string;
-            /** Risk Category */
-            risk_category: string;
-            /** Risk Score */
-            risk_score: number;
         };
         /** AuditOut */
         AuditOut: {
-            /** Action */
-            action: string;
-            /** Actor Id */
-            actor_id: string | null;
-            /** Actor Label */
-            actor_label: string;
-            /** Correlation Id */
-            correlation_id: string;
             /** Id */
             id: string;
-            /** Metadata Json */
-            metadata_json: {
-                [key: string]: unknown;
-            };
-            /** Policy Version */
-            policy_version: string | null;
-            /** Prev Hash */
-            prev_hash: string;
-            /** Record Hash */
-            record_hash: string;
-            /** Result */
-            result: string;
             /** Sequence */
             sequence: number;
-            /** Target Id */
-            target_id: string | null;
-            /** Target Type */
-            target_type: string;
             /**
              * Timestamp
              * Format: date-time
              */
             timestamp: string;
+            /** Actor Id */
+            actor_id: string | null;
+            /** Actor Label */
+            actor_label: string;
+            /** Action */
+            action: string;
+            /** Target Type */
+            target_type: string;
+            /** Target Id */
+            target_id: string | null;
+            /** Result */
+            result: string;
+            /** Policy Version */
+            policy_version: string | null;
+            /** Correlation Id */
+            correlation_id: string;
+            /** Metadata Json */
+            metadata_json: {
+                [key: string]: unknown;
+            };
+            /** Prev Hash */
+            prev_hash: string;
+            /** Record Hash */
+            record_hash: string;
         };
         /** AuditVerifyOut */
         AuditVerifyOut: {
+            /** Valid */
+            valid: boolean;
             /** Checked Records */
             checked_records: number;
             /** First Invalid Id */
             first_invalid_id?: string | null;
             /** Message */
             message: string;
-            /** Valid */
-            valid: boolean;
         };
         /** BehaviorFeatures */
         BehaviorFeatures: {
-            /** Activity Deviation */
-            activity_deviation: number;
-            /** Day Of Week */
-            day_of_week: number;
-            /** Distinct Resources 1H */
-            distinct_resources_1h: number;
-            /** Failed Logins 15M */
-            failed_logins_15m: number;
-            /** Geo Novelty */
-            geo_novelty: boolean;
             /** Login Hour */
             login_hour: number;
-            /** New Device */
-            new_device: boolean;
+            /** Day Of Week */
+            day_of_week: number;
+            /** Failed Logins 15M */
+            failed_logins_15m: number;
             /** Requests 1H */
             requests_1h: number;
+            /** Distinct Resources 1H */
+            distinct_resources_1h: number;
             /** Sensitive Access Ratio */
             sensitive_access_ratio: number;
+            /** New Device */
+            new_device: boolean;
+            /** Geo Novelty */
+            geo_novelty: boolean;
             /** Session Duration Min */
             session_duration_min: number;
+            /** Activity Deviation */
+            activity_deviation: number;
         };
         /** BehavioralSignalOut */
         BehavioralSignalOut: {
+            /** Id */
+            id: string;
             /**
              * Detected At
              * Format: date-time
              */
             detected_at: string;
-            /** Id */
-            id: string;
-            /** Is Simulated */
-            is_simulated: boolean;
-            /** Model Version */
-            model_version: string;
-            /** Risk Category */
-            risk_category: string;
             /** Risk Score */
             risk_score: number;
+            /** Risk Category */
+            risk_category: string;
+            /** Model Version */
+            model_version: string;
             /** Top Factors */
             top_factors: {
                 [key: string]: unknown;
             }[];
+            /** Is Simulated */
+            is_simulated: boolean;
+        };
+        /** ComplianceControl */
+        ComplianceControl: {
+            /** Control Id */
+            control_id: string;
+            /** Name */
+            name: string;
+            /** Status */
+            status: string;
+            /** Evidence */
+            evidence: string;
+            /** Last Verified */
+            last_verified?: string | null;
+        };
+        /** ComplianceReport */
+        ComplianceReport: {
+            /** Framework */
+            framework: string;
+            /** Generated At */
+            generated_at: string;
+            /** Overall Status */
+            overall_status: string;
+            /** Controls */
+            controls: components["schemas"]["ComplianceControl"][];
+            /** Summary */
+            summary: {
+                [key: string]: unknown;
+            };
         };
         /** ConfusionMatrix */
         ConfusionMatrix: {
-            /** False Negative */
-            false_negative: number;
-            /** False Positive */
-            false_positive: number;
             /** True Negative */
             true_negative: number;
+            /** False Positive */
+            false_positive: number;
+            /** False Negative */
+            false_negative: number;
             /** True Positive */
             true_positive: number;
         };
         /** DecisionOut */
         DecisionOut: {
-            /** Anomaly Score */
-            anomaly_score: number;
-            /** Correlation Id */
-            correlation_id: string;
-            /** Decision */
-            decision: string;
+            /** Request Id */
+            request_id: string;
             /** Identity Id */
             identity_id: string;
-            /** Is Simulated */
-            is_simulated: boolean;
+            /** Resource Id */
+            resource_id: string;
+            /** Requested Action */
+            requested_action: string;
+            /** Decision */
+            decision: string;
+            /** Risk Category */
+            risk_category: string;
+            /** Risk Score */
+            risk_score: number;
+            /** Anomaly Score */
+            anomaly_score: number;
             /** Policy Version */
             policy_version: string;
             /** Reasons */
@@ -879,180 +930,188 @@ export interface components {
             }[];
             /** Recommended Next Step */
             recommended_next_step: string;
-            /** Request Id */
-            request_id: string;
-            /** Requested Action */
-            requested_action: string;
-            /** Resource Id */
-            resource_id: string;
-            /** Risk Category */
-            risk_category: string;
-            /** Risk Score */
-            risk_score: number;
             /**
              * Timestamp
              * Format: date-time
              */
             timestamp: string;
+            /** Correlation Id */
+            correlation_id: string;
+            /** Is Simulated */
+            is_simulated: boolean;
+            /** Policy Trace */
+            policy_trace?: {
+                [key: string]: unknown;
+            }[];
+            /**
+             * Explanation
+             * @default
+             */
+            explanation: string;
+            /**
+             * Confidence
+             * @default 0
+             */
+            confidence: number;
         };
         /** DemoResetOut */
         DemoResetOut: {
-            /** Access Requests */
-            access_requests: number;
-            /** Devices */
-            devices: number;
+            /** Reset */
+            reset: boolean;
             /** Identities */
             identities: number;
+            /** Devices */
+            devices: number;
+            /** Access Requests */
+            access_requests: number;
             /** Incidents */
             incidents: number;
             /** Message */
             message: string;
-            /** Reset */
-            reset: boolean;
         };
         /** DemoRunOut */
         DemoRunOut: {
-            /** Demo Mode */
-            demo_mode: boolean;
+            /** Scenario */
+            scenario: string | null;
+            /** Results */
+            results: components["schemas"]["DemoScenarioOut"][];
             /**
              * Executed At
              * Format: date-time
              */
             executed_at: string;
+            /** Demo Mode */
+            demo_mode: boolean;
             /**
              * Is Simulated
              * @default true
              * @constant
              */
             is_simulated: true;
-            /** Results */
-            results: components["schemas"]["DemoScenarioOut"][];
-            /** Scenario */
-            scenario: string | null;
         };
         /** DemoScenarioInfo */
         DemoScenarioInfo: {
-            /** Description */
-            description: string;
-            /** Device */
-            device?: string | null;
-            /** Expected Outcome */
-            expected_outcome: string;
-            /** Resource */
-            resource: string;
             /** Scenario */
             scenario: string;
-            /** Subject */
-            subject: string;
             /** Title */
             title: string;
+            /** Description */
+            description: string;
+            /** Expected Outcome */
+            expected_outcome: string;
+            /** Subject */
+            subject: string;
+            /** Resource */
+            resource: string;
+            /** Device */
+            device?: string | null;
         };
         /** DemoScenarioOut */
         DemoScenarioOut: {
-            /** Actual Outcome */
-            actual_outcome: string;
-            /** Decision */
-            decision?: string | null;
+            /** Scenario */
+            scenario: string;
+            /** Title */
+            title: string;
             /** Description */
             description: string;
-            /** Details */
-            details?: {
-                [key: string]: unknown;
-            };
             /** Expected Outcome */
             expected_outcome: string;
-            /** Incident Id */
-            incident_id?: string | null;
+            /** Actual Outcome */
+            actual_outcome: string;
             /** Passed */
             passed: boolean;
             /** Request Id */
             request_id?: string | null;
+            /** Incident Id */
+            incident_id?: string | null;
+            /** Decision */
+            decision?: string | null;
             /** Risk Score */
             risk_score?: number | null;
-            /** Scenario */
-            scenario: string;
-            /** Title */
-            title: string;
+            /** Details */
+            details?: {
+                [key: string]: unknown;
+            };
         };
         /** DeviceEnrollIn */
         DeviceEnrollIn: {
+            /** Identity Id */
+            identity_id: string;
+            /** Name */
+            name: string;
             /**
              * Device Type
              * @enum {string}
              */
             device_type: "Laptop" | "Desktop" | "Mobile" | "Tablet" | "Virtual Machine";
-            /** Identity Id */
-            identity_id: string;
+            /** Operating System */
+            operating_system: string;
             /**
              * Initial State
              * @default UNVERIFIED
              * @enum {string}
              */
             initial_state: "TRUSTED" | "UNVERIFIED";
-            /** Name */
-            name: string;
-            /** Operating System */
-            operating_system: string;
         };
         /** DeviceOut */
         DeviceOut: {
-            /** Device Type */
-            device_type: string;
-            /**
-             * Enrolled At
-             * Format: date-time
-             */
-            enrolled_at: string;
-            /** Enrollment Status */
-            enrollment_status: string;
             /** Id */
             id: string;
             /** Identity Id */
             identity_id: string;
             /** Identity Name */
             identity_name?: string | null;
-            /** Is Simulated */
-            is_simulated: boolean;
-            /** Last Observed At */
-            last_observed_at: string | null;
             /** Name */
             name: string;
+            /** Device Type */
+            device_type: string;
             /** Operating System */
             operating_system: string;
+            /** State */
+            state: string;
+            /** Enrollment Status */
+            enrollment_status: string;
+            /** Last Observed At */
+            last_observed_at: string | null;
+            /**
+             * Enrolled At
+             * Format: date-time
+             */
+            enrolled_at: string;
             /** Revoked At */
             revoked_at: string | null;
             /** Signals */
             signals: {
                 [key: string]: unknown;
             };
-            /** State */
-            state: string;
+            /** Is Simulated */
+            is_simulated: boolean;
         };
         /** DeviceStateIn */
         DeviceStateIn: {
-            /** Reason */
-            reason: string;
             /**
              * State
              * @enum {string}
              */
             state: "TRUSTED" | "UNVERIFIED" | "RESTRICTED" | "REVOKED";
+            /** Reason */
+            reason: string;
         };
         /** EvaluateAccessIn */
         EvaluateAccessIn: {
-            /** Device Id */
-            device_id?: string | null;
-            features: components["schemas"]["BehaviorFeatures"];
             /** Identity Id */
             identity_id?: string | null;
+            /** Resource Id */
+            resource_id: string;
+            /** Device Id */
+            device_id?: string | null;
             /**
              * Requested Action
              * @default READ
              * @enum {string}
              */
             requested_action: "READ" | "WRITE" | "DELETE" | "ADMIN";
-            /** Resource Id */
-            resource_id: string;
+            features: components["schemas"]["BehaviorFeatures"];
             /**
              * Simulate
              * @default false
@@ -1068,17 +1127,12 @@ export interface components {
         HealthStatus: {
             /** Api */
             api: string;
-            /**
-             * Checked At
-             * Format: date-time
-             */
-            checked_at: string;
             /** Database */
             database: string;
-            /** Event Stream */
-            event_stream: string;
             /** Model */
             model: string;
+            /** Event Stream */
+            event_stream: string;
             /** Model Version */
             model_version?: string | null;
             /**
@@ -1086,118 +1140,123 @@ export interface components {
              * @default 0
              */
             stream_clients: number;
+            /**
+             * Checked At
+             * Format: date-time
+             */
+            checked_at: string;
         };
         /** IdentityDetail */
         IdentityDetail: {
+            /** Id */
+            id: string;
+            /** Display Name */
+            display_name: string;
+            /** Email */
+            email: string;
+            /** Role */
+            role: string;
+            /** Status */
+            status: string;
+            /** Department */
+            department: string;
+            /** Title */
+            title: string;
+            /** Current Risk */
+            current_risk: number;
+            /** Last Activity At */
+            last_activity_at: string | null;
+            /** Is Simulated */
+            is_simulated: boolean;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
             /** Active Sessions */
             active_sessions: number;
+            /** Sessions */
+            sessions: components["schemas"]["SessionOut"][];
+            /** Devices */
+            devices: components["schemas"]["DeviceOut"][];
+            /** Recent Access */
+            recent_access: components["schemas"]["AccessRequestOut"][];
+            /** Behavioral Signals */
+            behavioral_signals: components["schemas"]["BehavioralSignalOut"][];
+            /** Risk History */
+            risk_history: components["schemas"]["RiskPoint"][];
             /** Alerts */
             alerts: components["schemas"]["SecurityEventOut"][];
             /** Audit Events */
             audit_events: components["schemas"]["AuditOut"][];
-            /** Behavioral Signals */
-            behavioral_signals: components["schemas"]["BehavioralSignalOut"][];
-            /**
-             * Created At
-             * Format: date-time
-             */
-            created_at: string;
-            /** Current Risk */
-            current_risk: number;
-            /** Department */
-            department: string;
-            /** Devices */
-            devices: components["schemas"]["DeviceOut"][];
-            /** Display Name */
-            display_name: string;
-            /** Email */
-            email: string;
-            /** Id */
-            id: string;
-            /** Is Simulated */
-            is_simulated: boolean;
-            /** Last Activity At */
-            last_activity_at: string | null;
-            /** Recent Access */
-            recent_access: components["schemas"]["AccessRequestOut"][];
-            /** Risk History */
-            risk_history: components["schemas"]["RiskPoint"][];
-            /** Role */
-            role: string;
-            /** Sessions */
-            sessions: components["schemas"]["SessionOut"][];
-            /** Status */
-            status: string;
-            /** Title */
-            title: string;
         };
         /** IdentitySummary */
         IdentitySummary: {
-            /** Current Risk */
-            current_risk: number;
-            /** Department */
-            department: string;
+            /** Id */
+            id: string;
             /** Display Name */
             display_name: string;
             /** Email */
             email: string;
-            /** Id */
-            id: string;
-            /** Is Simulated */
-            is_simulated: boolean;
-            /** Last Activity At */
-            last_activity_at: string | null;
             /** Role */
             role: string;
             /** Status */
             status: string;
+            /** Department */
+            department: string;
             /** Title */
             title: string;
+            /** Current Risk */
+            current_risk: number;
+            /** Last Activity At */
+            last_activity_at: string | null;
+            /** Is Simulated */
+            is_simulated: boolean;
         };
         /** IncidentDetail */
         IncidentDetail: {
-            /** Access Requests */
-            access_requests: components["schemas"]["AccessRequestOut"][];
-            /** Assigned To */
-            assigned_to: string | null;
-            /** Classification */
-            classification: string;
-            /**
-             * Created At
-             * Format: date-time
-             */
-            created_at: string;
             /** Id */
             id: string;
+            /** Title */
+            title: string;
+            /** Classification */
+            classification: string;
+            /** Severity */
+            severity: string;
+            /** Status */
+            status: string;
             /** Identity Id */
             identity_id: string | null;
             /** Identity Name */
             identity_name?: string | null;
-            /** Is Simulated */
-            is_simulated: boolean;
-            /** Notes */
-            notes: components["schemas"]["IncidentNoteOut"][];
+            /** Summary */
+            summary: string;
+            /** Assigned To */
+            assigned_to: string | null;
             /** Related Access Request Ids */
             related_access_request_ids: string[];
             /** Related Device Ids */
             related_device_ids: string[];
             /** Resolution */
             resolution: string | null;
-            /** Severity */
-            severity: string;
-            /** Status */
-            status: string;
-            /** Summary */
-            summary: string;
-            /** Timeline */
-            timeline: components["schemas"]["SecurityEventOut"][];
-            /** Title */
-            title: string;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
             /**
              * Updated At
              * Format: date-time
              */
             updated_at: string;
+            /** Is Simulated */
+            is_simulated: boolean;
+            /** Notes */
+            notes: components["schemas"]["IncidentNoteOut"][];
+            /** Timeline */
+            timeline: components["schemas"]["SecurityEventOut"][];
+            /** Access Requests */
+            access_requests: components["schemas"]["AccessRequestOut"][];
         };
         /** IncidentNoteIn */
         IncidentNoteIn: {
@@ -1206,69 +1265,69 @@ export interface components {
         };
         /** IncidentNoteOut */
         IncidentNoteOut: {
+            /** Id */
+            id: string;
             /** Author Label */
             author_label: string;
+            /** Note */
+            note: string;
             /**
              * Created At
              * Format: date-time
              */
             created_at: string;
-            /** Id */
-            id: string;
-            /** Note */
-            note: string;
         };
         /** IncidentOut */
         IncidentOut: {
-            /** Assigned To */
-            assigned_to: string | null;
-            /** Classification */
-            classification: string;
-            /**
-             * Created At
-             * Format: date-time
-             */
-            created_at: string;
             /** Id */
             id: string;
+            /** Title */
+            title: string;
+            /** Classification */
+            classification: string;
+            /** Severity */
+            severity: string;
+            /** Status */
+            status: string;
             /** Identity Id */
             identity_id: string | null;
             /** Identity Name */
             identity_name?: string | null;
-            /** Is Simulated */
-            is_simulated: boolean;
+            /** Summary */
+            summary: string;
+            /** Assigned To */
+            assigned_to: string | null;
             /** Related Access Request Ids */
             related_access_request_ids: string[];
             /** Related Device Ids */
             related_device_ids: string[];
             /** Resolution */
             resolution: string | null;
-            /** Severity */
-            severity: string;
-            /** Status */
-            status: string;
-            /** Summary */
-            summary: string;
-            /** Title */
-            title: string;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
             /**
              * Updated At
              * Format: date-time
              */
             updated_at: string;
+            /** Is Simulated */
+            is_simulated: boolean;
         };
         /** IncidentUpdateIn */
         IncidentUpdateIn: {
-            /** Assigned To */
-            assigned_to?: string | null;
-            /** Note */
-            note?: string | null;
-            /** Resolution */
-            resolution?: string | null;
-            /** Severity */
-            severity?: ("LOW" | "MEDIUM" | "HIGH" | "CRITICAL") | null;
             /** Status */
             status?: ("OPEN" | "INVESTIGATING" | "CONTAINED" | "RESOLVED" | "FALSE_POSITIVE") | null;
+            /** Severity */
+            severity?: ("LOW" | "MEDIUM" | "HIGH" | "CRITICAL") | null;
+            /** Assigned To */
+            assigned_to?: string | null;
+            /** Resolution */
+            resolution?: string | null;
+            /** Note */
+            note?: string | null;
         };
         /** LoginIn */
         LoginIn: {
@@ -1279,81 +1338,81 @@ export interface components {
         };
         /** MeOut */
         MeOut: {
-            /** Csrf Token */
-            csrf_token: string;
-            /** Current Risk */
-            current_risk: number;
-            /** Demo Mode */
-            demo_mode: boolean;
-            /** Department */
-            department: string;
+            /** Id */
+            id: string;
             /** Display Name */
             display_name: string;
             /** Email */
             email: string;
-            /** Id */
-            id: string;
             /** Role */
             role: string;
+            /** Status */
+            status: string;
+            /** Department */
+            department: string;
+            /** Title */
+            title: string;
+            /** Current Risk */
+            current_risk: number;
+            /** Csrf Token */
+            csrf_token: string;
             /**
              * Session Expires At
              * Format: date-time
              */
             session_expires_at: string;
-            /** Status */
-            status: string;
-            /** Title */
-            title: string;
+            /** Demo Mode */
+            demo_mode: boolean;
         };
         /** ModelEvaluationOut */
         ModelEvaluationOut: {
-            /** Artifact Available */
-            artifact_available: boolean;
-            confusion_matrix: components["schemas"]["ConfusionMatrix"];
-            /** Dataset Description */
-            dataset_description: string;
-            /**
-             * Evaluated At
-             * Format: date-time
-             */
-            evaluated_at: string;
-            /** Feature Names */
-            feature_names: string[];
-            /** Label Distribution */
-            label_distribution: {
-                [key: string]: number;
-            };
-            /** Limitations */
-            limitations: string[];
-            metrics: components["schemas"]["ModelMetricSet"];
-            /** Model Type */
-            model_type: string;
             /** Model Version */
             model_version: string;
-            /** Score Interpretation */
-            score_interpretation: string;
-            /** Seed */
-            seed: number;
-            /** Test Rows */
-            test_rows: number;
-            /** Train Rows */
-            train_rows: number;
+            /** Model Type */
+            model_type: string;
             /**
              * Trained At
              * Format: date-time
              */
             trained_at: string;
+            /**
+             * Evaluated At
+             * Format: date-time
+             */
+            evaluated_at: string;
+            /** Seed */
+            seed: number;
+            /** Feature Names */
+            feature_names: string[];
+            /** Train Rows */
+            train_rows: number;
+            /** Test Rows */
+            test_rows: number;
+            /** Label Distribution */
+            label_distribution: {
+                [key: string]: number;
+            };
+            metrics: components["schemas"]["ModelMetricSet"];
+            confusion_matrix: components["schemas"]["ConfusionMatrix"];
+            /** Dataset Description */
+            dataset_description: string;
+            /** Score Interpretation */
+            score_interpretation: string;
+            /** Limitations */
+            limitations: string[];
+            /** Artifact Available */
+            artifact_available: boolean;
         };
         /** ModelMetricSet */
         ModelMetricSet: {
-            /** F1 */
-            f1: number;
-            /** False Positive Rate */
-            false_positive_rate: number;
             /** Precision */
             precision: number;
             /** Recall */
             recall: number;
+            /** F1 */
+            f1: number;
+            /** False Positive Rate */
+            false_positive_rate: number;
             /** Roc Auc */
             roc_auc: number | null;
             /** Threshold */
@@ -1368,12 +1427,10 @@ export interface components {
         };
         /** NotificationOut */
         NotificationOut: {
-            /** Event Type */
-            event_type: string;
             /** Id */
             id: string;
-            /** Link */
-            link: string;
+            /** Title */
+            title: string;
             /** Severity */
             severity: string;
             /**
@@ -1381,213 +1438,215 @@ export interface components {
              * Format: date-time
              */
             timestamp: string;
-            /** Title */
-            title: string;
+            /** Event Type */
+            event_type: string;
+            /** Link */
+            link: string;
         };
         /** OverviewMetrics */
         OverviewMetrics: {
-            /** Access Requests */
-            access_requests: number;
+            /** Total Identities */
+            total_identities: number;
             /** Active Sessions */
             active_sessions: number;
-            /** Challenged Requests */
-            challenged_requests: number;
-            /** Demo Events */
-            demo_events: number;
-            /** Denied Requests */
-            denied_requests: number;
+            /** Access Requests */
+            access_requests: number;
+            /** Suspicious Events */
+            suspicious_events: number;
             /** High Risk Requests */
             high_risk_requests: number;
+            /** Denied Requests */
+            denied_requests: number;
+            /** Challenged Requests */
+            challenged_requests: number;
             /** Model Analyzed Events */
             model_analyzed_events: number;
             /** Model Anomaly Rate */
             model_anomaly_rate: number;
             /** Model Version */
             model_version: string;
+            /** Demo Events */
+            demo_events: number;
             /** Real Events */
             real_events: number;
-            /** Suspicious Events */
-            suspicious_events: number;
-            /** Total Identities */
-            total_identities: number;
         };
         /** OverviewOut */
         OverviewOut: {
-            /** Decision Breakdown */
-            decision_breakdown: components["schemas"]["NamedCount"][];
+            /** Range Hours */
+            range_hours: number;
+            /** Range Label */
+            range_label: string;
             /**
              * Generated At
              * Format: date-time
              */
             generated_at: string;
-            health: components["schemas"]["HealthStatus"];
-            /** Identity Leaderboard */
-            identity_leaderboard: components["schemas"]["RiskLeader"][];
             metrics: components["schemas"]["OverviewMetrics"];
-            /** Range Hours */
-            range_hours: number;
-            /** Range Label */
-            range_label: string;
-            /** Recent Events */
-            recent_events: components["schemas"]["SecurityEventOut"][];
-            /** Risk Distribution */
-            risk_distribution: components["schemas"]["NamedCount"][];
             /** Timeline */
             timeline: components["schemas"]["TimelinePoint"][];
+            /** Risk Distribution */
+            risk_distribution: components["schemas"]["NamedCount"][];
+            /** Decision Breakdown */
+            decision_breakdown: components["schemas"]["NamedCount"][];
+            /** Identity Leaderboard */
+            identity_leaderboard: components["schemas"]["RiskLeader"][];
+            /** Recent Events */
+            recent_events: components["schemas"]["SecurityEventOut"][];
+            health: components["schemas"]["HealthStatus"];
         };
         /** Page[AccessRequestOut] */
         Page_AccessRequestOut_: {
             /** Items */
             items: components["schemas"]["AccessRequestOut"][];
+            /** Total */
+            total: number;
             /** Page */
             page: number;
             /** Page Size */
             page_size: number;
-            /** Total */
-            total: number;
         };
         /** Page[AuditOut] */
         Page_AuditOut_: {
             /** Items */
             items: components["schemas"]["AuditOut"][];
+            /** Total */
+            total: number;
             /** Page */
             page: number;
             /** Page Size */
             page_size: number;
-            /** Total */
-            total: number;
         };
         /** Page[DeviceOut] */
         Page_DeviceOut_: {
             /** Items */
             items: components["schemas"]["DeviceOut"][];
+            /** Total */
+            total: number;
             /** Page */
             page: number;
             /** Page Size */
             page_size: number;
-            /** Total */
-            total: number;
         };
         /** Page[IdentitySummary] */
         Page_IdentitySummary_: {
             /** Items */
             items: components["schemas"]["IdentitySummary"][];
+            /** Total */
+            total: number;
             /** Page */
             page: number;
             /** Page Size */
             page_size: number;
-            /** Total */
-            total: number;
         };
         /** Page[IncidentOut] */
         Page_IncidentOut_: {
             /** Items */
             items: components["schemas"]["IncidentOut"][];
+            /** Total */
+            total: number;
             /** Page */
             page: number;
             /** Page Size */
             page_size: number;
-            /** Total */
-            total: number;
         };
         /** Page[SecurityEventOut] */
         Page_SecurityEventOut_: {
             /** Items */
             items: components["schemas"]["SecurityEventOut"][];
+            /** Total */
+            total: number;
             /** Page */
             page: number;
             /** Page Size */
             page_size: number;
-            /** Total */
-            total: number;
         };
         /** PolicyOut */
         PolicyOut: {
-            /** Allowed Device States */
-            allowed_device_states: string[];
+            /** Id */
+            id: string;
+            /** Resource Id */
+            resource_id: string;
+            /** Version */
+            version: number;
             /** Allowed Roles */
             allowed_roles: string[];
+            /** Allowed Device States */
+            allowed_device_states: string[];
             /** Challenge Threshold */
             challenge_threshold: number;
-            /** Change Reason */
-            change_reason: string;
+            /** Deny Threshold */
+            deny_threshold: number;
+            /** Require Additional Verification */
+            require_additional_verification: boolean;
+            /** Session Max Minutes */
+            session_max_minutes: number;
+            /** Is Active */
+            is_active: boolean;
+            /** Created By */
+            created_by: string | null;
             /**
              * Created At
              * Format: date-time
              */
             created_at: string;
-            /** Created By */
-            created_by: string | null;
-            /** Deny Threshold */
-            deny_threshold: number;
-            /** Id */
-            id: string;
-            /** Is Active */
-            is_active: boolean;
+            /** Change Reason */
+            change_reason: string;
             /** Is Simulated */
             is_simulated: boolean;
-            /** Require Additional Verification */
-            require_additional_verification: boolean;
-            /** Resource Id */
-            resource_id: string;
-            /** Session Max Minutes */
-            session_max_minutes: number;
-            /** Version */
-            version: number;
         };
         /** PolicyPreviewCase */
         PolicyPreviewCase: {
-            /**
-             * Account Active
-             * @default true
-             */
-            account_active: boolean;
-            /**
-             * Device State
-             * @enum {string}
-             */
-            device_state: "TRUSTED" | "UNVERIFIED" | "RESTRICTED" | "REVOKED";
-            /**
-             * Identity Authorized
-             * @default true
-             */
-            identity_authorized: boolean;
-            /**
-             * Repeated Anomalies
-             * @default 0
-             */
-            repeated_anomalies: number;
-            /** Risk Score */
-            risk_score: number;
             /**
              * Role
              * @enum {string}
              */
             role: "SECURITY_ADMIN" | "SECURITY_ANALYST" | "EMPLOYEE" | "AUDITOR";
             /**
+             * Device State
+             * @enum {string}
+             */
+            device_state: "TRUSTED" | "UNVERIFIED" | "RESTRICTED" | "REVOKED";
+            /** Risk Score */
+            risk_score: number;
+            /**
+             * Account Active
+             * @default true
+             */
+            account_active: boolean;
+            /**
+             * Identity Authorized
+             * @default true
+             */
+            identity_authorized: boolean;
+            /**
              * Session Active
              * @default true
              */
             session_active: boolean;
+            /**
+             * Repeated Anomalies
+             * @default 0
+             */
+            repeated_anomalies: number;
         };
         /** PolicyPreviewIn */
         PolicyPreviewIn: {
+            draft: components["schemas"]["PolicyUpdateIn"];
             /** Cases */
             cases: components["schemas"]["PolicyPreviewCase"][];
-            draft: components["schemas"]["PolicyUpdateIn"];
         };
         /** PolicyPreviewOut */
         PolicyPreviewOut: {
+            /** Policy Version Preview */
+            policy_version_preview: string;
+            /** Results */
+            results: components["schemas"]["PolicyPreviewResult"][];
             /**
              * Persisted
              * @default false
              * @constant
              */
             persisted: false;
-            /** Policy Version Preview */
-            policy_version_preview: string;
-            /** Results */
-            results: components["schemas"]["PolicyPreviewResult"][];
         };
         /** PolicyPreviewResult */
         PolicyPreviewResult: {
@@ -1602,21 +1661,14 @@ export interface components {
         };
         /** PolicyUpdateIn */
         PolicyUpdateIn: {
-            /** Allowed Device States */
-            allowed_device_states: string[];
             /** Allowed Roles */
             allowed_roles: string[];
+            /** Allowed Device States */
+            allowed_device_states: string[];
             /** Challenge Threshold */
             challenge_threshold: number;
             /** Deny Threshold */
             deny_threshold: number;
-            /**
-             * Is Active
-             * @default true
-             */
-            is_active: boolean;
-            /** Reason */
-            reason: string;
             /**
              * Require Additional Verification
              * @default true
@@ -1624,96 +1676,105 @@ export interface components {
             require_additional_verification: boolean;
             /** Session Max Minutes */
             session_max_minutes: number;
+            /** Reason */
+            reason: string;
+            /**
+             * Is Active
+             * @default true
+             */
+            is_active: boolean;
         };
         /** ResourcePolicyOut */
         ResourcePolicyOut: {
-            /** Description */
-            description: string;
             /** Id */
             id: string;
-            /** Is Active */
-            is_active: boolean;
-            /** Is Simulated */
-            is_simulated: boolean;
             /** Key */
             key: string;
             /** Name */
             name: string;
-            /** Owner Department */
-            owner_department: string;
-            policy: components["schemas"]["PolicyOut"] | null;
+            /** Description */
+            description: string;
             /** Sensitivity */
             sensitivity: string;
+            /** Owner Department */
+            owner_department: string;
+            /** Is Active */
+            is_active: boolean;
+            /** Is Simulated */
+            is_simulated: boolean;
+            policy: components["schemas"]["PolicyOut"] | null;
             /** Version Count */
             version_count: number;
         };
         /** RiskLeader */
         RiskLeader: {
-            /** Anomaly Count */
-            anomaly_count: number;
             /** Identity Id */
             identity_id: string;
             /** Identity Name */
             identity_name: string;
-            /** Risk Score */
-            risk_score: number;
             /** Role */
             role: string;
+            /** Risk Score */
+            risk_score: number;
+            /** Anomaly Count */
+            anomaly_count: number;
         };
         /** RiskPoint */
         RiskPoint: {
-            /** Risk Category */
-            risk_category: string;
-            /** Risk Score */
-            risk_score: number;
-            /** Source */
-            source: string;
             /**
              * Timestamp
              * Format: date-time
              */
             timestamp: string;
+            /** Risk Score */
+            risk_score: number;
+            /** Risk Category */
+            risk_category: string;
+            /** Source */
+            source: string;
         };
         /** SecurityEventOut */
         SecurityEventOut: {
-            /** Access Request Id */
-            access_request_id: string | null;
-            /** Actor Id */
-            actor_id: string | null;
+            /** Id */
+            id: string;
+            /** Event Type */
+            event_type: string;
             /** Category */
             category: string;
+            /** Severity */
+            severity: string;
+            /** Summary */
+            summary: string;
+            /** Identity Id */
+            identity_id: string | null;
+            /** Device Id */
+            device_id: string | null;
+            /** Access Request Id */
+            access_request_id: string | null;
+            /** Incident Id */
+            incident_id: string | null;
+            /** Actor Id */
+            actor_id: string | null;
+            /** Policy Version */
+            policy_version: string | null;
             /** Correlation Id */
             correlation_id: string;
             /** Details */
             details: {
                 [key: string]: unknown;
             };
-            /** Device Id */
-            device_id: string | null;
-            /** Event Type */
-            event_type: string;
-            /** Id */
-            id: string;
-            /** Identity Id */
-            identity_id: string | null;
-            /** Incident Id */
-            incident_id: string | null;
-            /** Is Simulated */
-            is_simulated: boolean;
-            /** Policy Version */
-            policy_version: string | null;
-            /** Severity */
-            severity: string;
-            /** Summary */
-            summary: string;
             /**
              * Timestamp
              * Format: date-time
              */
             timestamp: string;
+            /** Is Simulated */
+            is_simulated: boolean;
         };
         /** SessionOut */
         SessionOut: {
+            /** Id */
+            id: string;
             /**
              * Created At
              * Format: date-time
@@ -1724,59 +1785,57 @@ export interface components {
              * Format: date-time
              */
             expires_at: string;
-            /** Id */
-            id: string;
             /** Ip Address */
             ip_address: string | null;
-            /** Is Simulated */
-            is_simulated: boolean;
             /** User Agent */
             user_agent: string | null;
+            /** Is Simulated */
+            is_simulated: boolean;
         };
         /** SettingsInfoOut */
         SettingsInfoOut: {
-            /** Allowed Origins */
-            allowed_origins: string[];
-            /** Demo Mode */
-            demo_mode: boolean;
             /** Environment */
             environment: string;
-            /** Limitations */
-            limitations: string[];
+            /** Demo Mode */
+            demo_mode: boolean;
+            /** Session Ttl Minutes */
+            session_ttl_minutes: number;
             /** Login Rate Limit */
             login_rate_limit: number;
             /** Login Rate Window Seconds */
             login_rate_window_seconds: number;
+            /** Allowed Origins */
+            allowed_origins: string[];
             /** Model Artifact Available */
             model_artifact_available: boolean;
             /** Model Version */
             model_version: string | null;
-            /** Session Ttl Minutes */
-            session_ttl_minutes: number;
+            /** Limitations */
+            limitations: string[];
         };
         /** TimelinePoint */
         TimelinePoint: {
-            /** Access Requests */
-            access_requests: number;
             /** Bucket */
             bucket: string;
-            /** High Risk */
-            high_risk: number;
+            /** Access Requests */
+            access_requests: number;
             /** Security Events */
             security_events: number;
+            /** High Risk */
+            high_risk: number;
         };
         /** ValidationError */
         ValidationError: {
-            /** Context */
-            ctx?: Record<string, never>;
-            /** Input */
-            input?: unknown;
             /** Location */
             loc: (string | number)[];
             /** Message */
             msg: string;
             /** Error Type */
             type: string;
+            /** Input */
+            input?: unknown;
+            /** Context */
+            ctx?: Record<string, never>;
         };
     };
     responses: never;
@@ -1809,219 +1868,7 @@ export interface operations {
             };
         };
     };
-    list_access_requests_api_access_requests_get: {
-        parameters: {
-            query?: {
-                q?: string | null;
-                decision?: ("ALLOW" | "DENY" | "CHALLENGE" | "RESTRICT") | null;
-                risk_category?: ("LOW" | "MEDIUM" | "HIGH" | "CRITICAL") | null;
-                identity_id?: string | null;
-                from_time?: string | null;
-                to_time?: string | null;
-                page?: number;
-                page_size?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Page_AccessRequestOut_"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    evaluate_access_request_api_access_requests_evaluate_post: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["EvaluateAccessIn"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["DecisionOut"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    export_access_requests_api_access_requests_export_csv_get: {
-        parameters: {
-            query?: {
-                q?: string | null;
-                decision?: ("ALLOW" | "DENY" | "CHALLENGE" | "RESTRICT") | null;
-                risk_category?: ("LOW" | "MEDIUM" | "HIGH" | "CRITICAL") | null;
-                identity_id?: string | null;
-                from_time?: string | null;
-                to_time?: string | null;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": unknown;
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    get_access_request_api_access_requests__request_id__get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                request_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["AccessRequestDetail"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    list_audit_api_audit_get: {
-        parameters: {
-            query?: {
-                q?: string | null;
-                action?: string | null;
-                actor_id?: string | null;
-                target_type?: string | null;
-                from_time?: string | null;
-                to_time?: string | null;
-                page?: number;
-                page_size?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Page_AuditOut_"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    export_audit_api_audit_export_csv_get: {
-        parameters: {
-            query?: {
-                q?: string | null;
-                action?: string | null;
-                actor_id?: string | null;
-                target_type?: string | null;
-                from_time?: string | null;
-                to_time?: string | null;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": unknown;
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    verify_chain_api_audit_verify_get: {
+    health_api_health_get: {
         parameters: {
             query?: never;
             header?: never;
@@ -2036,7 +1883,71 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AuditVerifyOut"];
+                    "application/json": {
+                        [key: string]: string;
+                    };
+                };
+            };
+        };
+    };
+    readiness_api_health_ready_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+        };
+    };
+    detailed_health_api_health_detailed_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HealthStatus"];
+                };
+            };
+        };
+    };
+    settings_info_api_settings_info_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SettingsInfoOut"];
                 };
             };
         };
@@ -2074,6 +1985,26 @@ export interface operations {
             };
         };
     };
+    me_api_auth_me_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MeOut"];
+                };
+            };
+        };
+    };
     logout_api_auth_logout_post: {
         parameters: {
             query?: never;
@@ -2096,9 +2027,15 @@ export interface operations {
             };
         };
     };
-    me_api_auth_me_get: {
+    list_identities_api_identities_get: {
         parameters: {
-            query?: never;
+            query?: {
+                q?: string | null;
+                role?: ("SECURITY_ADMIN" | "SECURITY_ANALYST" | "AUDITOR") | string | null;
+                status?: ("ACTIVE" | "DISABLED") | null;
+                page?: number;
+                page_size?: number;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -2111,77 +2048,26 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["MeOut"];
+                    "application/json": components["schemas"]["Page_IdentitySummary_"];
                 };
             };
-        };
-    };
-    reset_demo_api_demo_reset_post: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
+            /** @description Validation Error */
+            422: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["DemoResetOut"];
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };
     };
-    run_all_demo_scenarios_api_demo_run_post: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["DemoRunOut"];
-                };
-            };
-        };
-    };
-    get_demo_scenarios_api_demo_scenarios_get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["DemoScenarioInfo"][];
-                };
-            };
-        };
-    };
-    run_demo_scenario_api_demo_scenarios__scenario__post: {
+    get_identity_api_identities__identity_id__get: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                scenario: "A" | "B" | "C" | "D" | "E" | "F";
+                identity_id: string;
             };
             cookie?: never;
         };
@@ -2193,7 +2079,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["DemoRunOut"];
+                    "application/json": components["schemas"]["IdentityDetail"];
                 };
             };
             /** @description Validation Error */
@@ -2310,13 +2196,12 @@ export interface operations {
             };
         };
     };
-    list_events_api_events_get: {
+    list_access_requests_api_access_requests_get: {
         parameters: {
             query?: {
                 q?: string | null;
-                event_type?: string | null;
-                category?: string | null;
-                severity?: ("LOW" | "MEDIUM" | "HIGH" | "CRITICAL") | null;
+                decision?: ("ALLOW" | "DENY" | "CHALLENGE" | "RESTRICT") | null;
+                risk_category?: ("LOW" | "MEDIUM" | "HIGH" | "CRITICAL") | null;
                 identity_id?: string | null;
                 from_time?: string | null;
                 to_time?: string | null;
@@ -2335,7 +2220,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["Page_SecurityEventOut_"];
+                    "application/json": components["schemas"]["Page_AccessRequestOut_"];
                 };
             };
             /** @description Validation Error */
@@ -2349,177 +2234,15 @@ export interface operations {
             };
         };
     };
-    get_event_api_events__event_id__get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                event_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SecurityEventOut"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    health_api_health_get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        [key: string]: string;
-                    };
-                };
-            };
-        };
-    };
-    detailed_health_api_health_detailed_get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HealthStatus"];
-                };
-            };
-        };
-    };
-    readiness_api_health_ready_get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        [key: string]: unknown;
-                    };
-                };
-            };
-        };
-    };
-    list_identities_api_identities_get: {
+    export_access_requests_api_access_requests_export_csv_get: {
         parameters: {
             query?: {
                 q?: string | null;
-                role?: ("SECURITY_ADMIN" | "SECURITY_ANALYST" | "AUDITOR") | string | null;
-                status?: ("ACTIVE" | "DISABLED") | null;
-                page?: number;
-                page_size?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Page_IdentitySummary_"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    get_identity_api_identities__identity_id__get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                identity_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["IdentityDetail"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    list_incidents_api_incidents_get: {
-        parameters: {
-            query?: {
-                q?: string | null;
-                status?: ("OPEN" | "INVESTIGATING" | "CONTAINED" | "RESOLVED" | "FALSE_POSITIVE") | null;
-                severity?: ("LOW" | "MEDIUM" | "HIGH" | "CRITICAL") | null;
+                decision?: ("ALLOW" | "DENY" | "CHALLENGE" | "RESTRICT") | null;
+                risk_category?: ("LOW" | "MEDIUM" | "HIGH" | "CRITICAL") | null;
                 identity_id?: string | null;
-                assigned_to?: string | null;
-                page?: number;
-                page_size?: number;
+                from_time?: string | null;
+                to_time?: string | null;
             };
             header?: never;
             path?: never;
@@ -2533,7 +2256,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["Page_IncidentOut_"];
+                    "application/json": unknown;
                 };
             };
             /** @description Validation Error */
@@ -2547,233 +2270,7 @@ export interface operations {
             };
         };
     };
-    get_incident_api_incidents__incident_id__get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                incident_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["IncidentDetail"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    update_incident_api_incidents__incident_id__patch: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                incident_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["IncidentUpdateIn"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["IncidentDetail"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    add_incident_note_api_incidents__incident_id__notes_post: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                incident_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["IncidentNoteIn"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["IncidentNoteOut"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    model_evaluation_api_model_evaluation_get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ModelEvaluationOut"];
-                };
-            };
-        };
-    };
-    model_features_api_model_features_get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        [key: string]: unknown;
-                    }[];
-                };
-            };
-        };
-    };
-    retrain_model_api_model_retrain_post: {
-        parameters: {
-            query?: {
-                seed?: number;
-                rows?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ModelEvaluationOut"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    list_notifications_api_notifications_get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["NotificationOut"][];
-                };
-            };
-        };
-    };
-    get_overview_api_overview_get: {
-        parameters: {
-            query?: {
-                range_hours?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["OverviewOut"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    preview_policy_api_policies_preview_post: {
+    evaluate_access_request_api_access_requests_evaluate_post: {
         parameters: {
             query?: never;
             header?: never;
@@ -2782,7 +2279,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["PolicyPreviewIn"];
+                "application/json": components["schemas"]["EvaluateAccessIn"];
             };
         };
         responses: {
@@ -2792,7 +2289,38 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PolicyPreviewOut"];
+                    "application/json": components["schemas"]["DecisionOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_access_request_api_access_requests__request_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                request_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AccessRequestDetail"];
                 };
             };
             /** @description Validation Error */
@@ -2935,7 +2463,110 @@ export interface operations {
             };
         };
     };
-    settings_info_api_settings_info_get: {
+    preview_policy_api_policies_preview_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PolicyPreviewIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PolicyPreviewOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_events_api_events_get: {
+        parameters: {
+            query?: {
+                q?: string | null;
+                event_type?: string | null;
+                category?: string | null;
+                severity?: ("LOW" | "MEDIUM" | "HIGH" | "CRITICAL") | null;
+                identity_id?: string | null;
+                from_time?: string | null;
+                to_time?: string | null;
+                page?: number;
+                page_size?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Page_SecurityEventOut_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_event_api_events__event_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                event_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SecurityEventOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_notifications_api_notifications_get: {
         parameters: {
             query?: never;
             header?: never;
@@ -2950,7 +2581,466 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SettingsInfoOut"];
+                    "application/json": components["schemas"]["NotificationOut"][];
+                };
+            };
+        };
+    };
+    list_incidents_api_incidents_get: {
+        parameters: {
+            query?: {
+                q?: string | null;
+                status?: ("OPEN" | "INVESTIGATING" | "CONTAINED" | "RESOLVED" | "FALSE_POSITIVE") | null;
+                severity?: ("LOW" | "MEDIUM" | "HIGH" | "CRITICAL") | null;
+                identity_id?: string | null;
+                assigned_to?: string | null;
+                page?: number;
+                page_size?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Page_IncidentOut_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_incident_api_incidents__incident_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                incident_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IncidentDetail"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_incident_api_incidents__incident_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                incident_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["IncidentUpdateIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IncidentDetail"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    add_incident_note_api_incidents__incident_id__notes_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                incident_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["IncidentNoteIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IncidentNoteOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_overview_api_overview_get: {
+        parameters: {
+            query?: {
+                range_hours?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OverviewOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    model_evaluation_api_model_evaluation_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ModelEvaluationOut"];
+                };
+            };
+        };
+    };
+    model_features_api_model_features_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    }[];
+                };
+            };
+        };
+    };
+    retrain_model_api_model_retrain_post: {
+        parameters: {
+            query?: {
+                seed?: number;
+                rows?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ModelEvaluationOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_audit_api_audit_get: {
+        parameters: {
+            query?: {
+                q?: string | null;
+                action?: string | null;
+                actor_id?: string | null;
+                target_type?: string | null;
+                from_time?: string | null;
+                to_time?: string | null;
+                page?: number;
+                page_size?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Page_AuditOut_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    verify_chain_api_audit_verify_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuditVerifyOut"];
+                };
+            };
+        };
+    };
+    export_audit_api_audit_export_csv_get: {
+        parameters: {
+            query?: {
+                q?: string | null;
+                action?: string | null;
+                actor_id?: string | null;
+                target_type?: string | null;
+                from_time?: string | null;
+                to_time?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    compliance_report_api_compliance_report_get: {
+        parameters: {
+            query?: {
+                framework?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ComplianceReport"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_demo_scenarios_api_demo_scenarios_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DemoScenarioInfo"][];
+                };
+            };
+        };
+    };
+    run_demo_scenario_api_demo_scenarios__scenario__post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                scenario: "A" | "B" | "C" | "D" | "E" | "F";
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DemoRunOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    run_all_demo_scenarios_api_demo_run_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DemoRunOut"];
+                };
+            };
+        };
+    };
+    reset_demo_api_demo_reset_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DemoResetOut"];
                 };
             };
         };
