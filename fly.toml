@@ -26,3 +26,4 @@ primary_region = "sin"
   cpu_kind = "shared"
   cpus = 1
   memory_mb = 512
+  persist_rootfs = "restart"
