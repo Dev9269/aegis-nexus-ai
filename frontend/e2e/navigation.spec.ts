@@ -3,8 +3,8 @@ import { expect, test } from "@playwright/test";
 const password = process.env.AEGIS_DEMO_PASSWORD ?? "ChangeMe-Demo!2026";
 
 const pages = [
-  { path: "/", heading: /Good (morning|afternoon|evening), Avery/ },
-  { path: "/me", heading: "Welcome, Avery" },
+  { path: "/", heading: /Good (morning|afternoon|evening), dev9269/ },
+  { path: "/me", heading: "Welcome, dev9269" },
   { path: "/access", heading: "Access decisions" },
   { path: "/behavior", heading: "Behavioral risk" },
   { path: "/identities", heading: "Identities" },
@@ -26,7 +26,7 @@ test("every staff console surface renders against the live API", async ({ page }
   await page.getByLabel("Work email").fill("admin@aegisnexus.ai");
   await page.locator("#password").fill(password);
   await page.getByRole("button", { name: /Sign in securely/i }).click();
-  await expect(page.getByRole("heading", { name: /Good (morning|afternoon|evening), Avery/ })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /Good (morning|afternoon|evening), dev9269/ })).toBeVisible();
 
   for (const surface of pages) {
     await page.goto(surface.path);
