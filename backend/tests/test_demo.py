@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import os
+
 from sqlalchemy import select
 
 from app.models import AuditLog
@@ -9,7 +11,7 @@ from tests.conftest import login
 
 def test_demo_scenarios_execute_production_paths_and_false_positive_workflow(client, db):
     seed_demo_data(db)
-    csrf = login(client, "admin@aegisnexus.ai")
+    csrf = login(client, "admin@aegisnexus.ai", os.environ.get("AEGIS_DEMO_PASSWORD", "Test-Demo!2026"))
 
     scenarios = client.get("/api/demo/scenarios")
     assert scenarios.status_code == 200
@@ -66,7 +68,7 @@ def test_demo_scenarios_execute_production_paths_and_false_positive_workflow(cli
 
 def test_demo_reset_recreates_simulated_data_and_preserves_audit_chain(client, db):
     seed_demo_data(db)
-    csrf = login(client, "admin@aegisnexus.ai")
+    csrf = login(client, "admin@aegisnexus.ai", os.environ.get("AEGIS_DEMO_PASSWORD", "Test-Demo!2026"))
     before = len(list(db.scalars(select(AuditLog))))
 
     response = client.post("/api/demo/reset", headers={"X-CSRF-Token": csrf})
@@ -81,7 +83,7 @@ def test_demo_reset_recreates_simulated_data_and_preserves_audit_chain(client, d
     assert after > before
     assert client.get("/api/auth/me").status_code == 401
 
-    csrf = login(client, "admin@aegisnexus.ai")
+    csrf = login(client, "admin@aegisnexus.ai", os.environ.get("AEGIS_DEMO_PASSWORD", "Test-Demo!2026"))
     rerun = client.post(
         "/api/demo/scenarios/A",
         headers={"X-CSRF-Token": csrf},
@@ -94,7 +96,7 @@ def test_demo_reset_recreates_simulated_data_and_preserves_audit_chain(client, d
 def test_demo_role_boundaries(client, db):
     seed_demo_data(db)
 
-    analyst_csrf = login(client, "analyst@aegisnexus.ai")
+    analyst_csrf = login(client, "analyst@aegisnexus.ai", os.environ.get("AEGIS_DEMO_PASSWORD", "Test-Demo!2026"))
     assert client.post(
         "/api/demo/scenarios/A", headers={"X-CSRF-Token": analyst_csrf}
     ).status_code == 200
@@ -102,13 +104,13 @@ def test_demo_role_boundaries(client, db):
         "/api/demo/reset", headers={"X-CSRF-Token": analyst_csrf}
     ).status_code == 403
 
-    auditor_csrf = login(client, "auditor@aegisnexus.ai")
+    auditor_csrf = login(client, "auditor@aegisnexus.ai", os.environ.get("AEGIS_DEMO_PASSWORD", "Test-Demo!2026"))
     assert client.get("/api/demo/scenarios").status_code == 200
     assert client.post(
         "/api/demo/run", headers={"X-CSRF-Token": auditor_csrf}
     ).status_code == 403
 
-    employee_csrf = login(client, "maya.chen@aegisnexus.ai")
+    employee_csrf = login(client, "maya.chen@aegisnexus.ai", os.environ.get("AEGIS_DEMO_PASSWORD", "Test-Demo!2026"))
     assert client.get("/api/demo/scenarios").status_code == 403
     assert client.post(
         "/api/demo/run", headers={"X-CSRF-Token": employee_csrf}
