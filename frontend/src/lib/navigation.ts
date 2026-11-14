@@ -1,6 +1,7 @@
 import {
   Activity,
   BookLock,
+  Bot,
   Bug,
   Globe,
   ClipboardCheck,
@@ -74,6 +75,14 @@ export const NAV_ITEMS: NavItem[] = [
     label: "Incidents",
     description: "Investigation and response workflow",
     icon: ShieldAlert,
+    group: "Respond",
+    roles: ["SECURITY_ADMIN", "SECURITY_ANALYST", "AUDITOR"],
+  },
+  {
+    to: "/copilot",
+    label: "Analyst copilot",
+    description: "Ask questions about live posture and risk",
+    icon: Bot,
     group: "Respond",
     roles: ["SECURITY_ADMIN", "SECURITY_ANALYST", "AUDITOR"],
   },

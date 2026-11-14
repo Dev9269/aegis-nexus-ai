@@ -38,6 +38,11 @@ import type {
   RedTeamRunOut,
   RedTeamScenario,
   ThreatIntelSummary,
+  PlaybookActionId,
+  PlaybookCatalog,
+  PlaybookResult,
+  CopilotAnswer,
+  ExecutiveReport,
 } from "../types/api";
 
 import { buildQuery, download, request } from "../lib/http";
@@ -132,6 +137,20 @@ export const api = {
     request<{ finding: LeakFinding; incident_id: string | null; message: string }>(`/threat-intel/simulate${buildQuery({ identity_id: identityId })}`, { method: "POST" }),
   updateLeakFinding: (findingId: string, status: string) =>
     request<LeakFinding>(`/threat-intel/findings/${findingId}`, { method: "PATCH", body: { status } }),
+
+  playbookCatalog: () => request<PlaybookCatalog>("/response/playbooks"),
+  runPlaybook: (incidentId: string, actions: PlaybookActionId[], reason: string) =>
+    request<PlaybookResult>(`/response/incidents/${incidentId}/actions`, {
+      method: "POST",
+      body: { actions, reason },
+    }),
+
+  askCopilot: (question: string) =>
+    request<CopilotAnswer>("/copilot/ask", { method: "POST", body: { question } }),
+
+  executiveReport: () => request<ExecutiveReport>("/reports/executive"),
+  downloadExecutiveReport: () =>
+    download("/reports/executive.pdf", "aegis-executive-report.pdf"),
 
   redTeamScenarios: () => request<RedTeamScenario[]>("/red-team/scenarios"),
   runRedTeam: (scenario?: string) =>

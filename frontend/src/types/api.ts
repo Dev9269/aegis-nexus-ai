@@ -580,6 +580,74 @@ export interface RedTeamRunOut {
   overall: string;
 }
 
+export type PlaybookActionId =
+  | "DISABLE_IDENTITY"
+  | "REVOKE_SESSIONS"
+  | "ROTATE_CREDENTIALS"
+  | "RESTRICT_DEVICES"
+  | "CONTAIN_INCIDENT";
+
+export interface PlaybookActionInfo {
+  id: PlaybookActionId;
+  label: string;
+  description: string;
+  severity: string;
+  reversible: boolean;
+}
+
+export interface PlaybookCatalog {
+  actions: PlaybookActionInfo[];
+  note: string;
+}
+
+export interface PlaybookActionOutcome {
+  action: PlaybookActionId;
+  label: string;
+  status: "APPLIED" | "SKIPPED" | "FAILED";
+  detail: string;
+}
+
+export interface PlaybookResult {
+  incident_id: string;
+  incident_status: IncidentStatus;
+  identity_id: string | null;
+  identity_status: string | null;
+  outcomes: PlaybookActionOutcome[];
+  applied_count: number;
+  correlation_id: string;
+  summary: string;
+}
+
+export interface CopilotAnswer {
+  question: string;
+  intent: string;
+  answer: string;
+  bullets: string[];
+  suggestions: string[];
+  data: Record<string, unknown>;
+  read_only: boolean;
+}
+
+export interface ReportMetric {
+  label: string;
+  value: string;
+}
+
+export interface ReportSection {
+  title: string;
+  metrics: ReportMetric[];
+  bullets: string[];
+}
+
+export interface ExecutiveReport {
+  generated_at: string;
+  organization: string;
+  headline: string;
+  overall_risk: string;
+  highlights: string[];
+  sections: ReportSection[];
+}
+
 export interface DeviceEnrollPayload {
   identity_id: string;
   name: string;

@@ -72,6 +72,15 @@ EXPECTED = {
     "/api/threat-intel/findings/{finding_id}": {"patch": "update_leak_finding_api_threat_intel_findings__finding_id__patch"},
     "/api/threat-intel/simulate": {"post": "simulate_leak_finding_api_threat_intel_simulate_post"},
     "/api/threat-intel/summary": {"get": "threat_intel_summary_api_threat_intel_summary_get"},
+    "/api/response/playbooks": {"get": "list_playbooks_api_response_playbooks_get"},
+    "/api/response/incidents/{incident_id}/actions": {
+        "post": "run_playbook_api_response_incidents__incident_id__actions_post"
+    },
+    "/api/copilot/ask": {"post": "ask_copilot_api_copilot_ask_post"},
+    "/api/reports/executive": {"get": "executive_report_api_reports_executive_get"},
+    "/api/reports/executive.pdf": {
+        "get": "executive_report_pdf_api_reports_executive_pdf_get"
+    },
 }
 
 

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { ArrowUpRight, CheckCircle2, ClipboardList, FileText, MessageSquare, Siren, UserCheck } from "lucide-react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { ArrowUpRight, CheckCircle2, ClipboardList, FileText, MessageSquare, Siren, UserCheck, Zap } from "lucide-react";
 import { api, messageFromError } from "../services/api";
 import { useIncident, useIncidents, useStaffCandidates } from "../hooks/queries";
 import { useAuth } from "../hooks/useAuth";
@@ -29,7 +29,7 @@ import {
   Tabs,
   TextArea,
 } from "../components/ui";
-import type { Incident, IncidentStatus, IncidentUpdate, Severity } from "../types/api";
+import type { Incident, IncidentStatus, IncidentUpdate, PlaybookActionId, Severity } from "../types/api";
 import {
   cn,
   formatDateTime,
@@ -432,6 +432,12 @@ function IncidentPanel({
               Auditors can inspect evidence and workflow history but cannot modify incidents.
             </Callout>
           )}
+
+          <ResponsePlaybookPanel
+            incidentId={incidentId}
+            canWrite={canWrite}
+            onApplied={invalidate}
+          />
         </div>
       )}
 
@@ -536,5 +542,121 @@ function IncidentPanel({
         </div>
       )}
     </div>
+  );
+}
+
+function ResponsePlaybookPanel({
+  incidentId,
+  canWrite,
+  onApplied,
+}: {
+  incidentId: string;
+  canWrite: boolean;
+  onApplied: () => void;
+}) {
+  const toast = useToast();
+  const [selected, setSelected] = useState<PlaybookActionId[]>([]);
+  const [reason, setReason] = useState("");
+
+  const catalog = useQuery({
+    queryKey: ["playbook-catalog"],
+    queryFn: () => api.playbookCatalog(),
+    enabled: canWrite,
+    staleTime: 5 * 60 * 1000,
+  });
+
+  const run = useMutation({
+    mutationFn: () => api.runPlaybook(incidentId, selected, reason.trim()),
+    onSuccess: (result) => {
+      toast.success("Playbook executed", result.summary);
+      setSelected([]);
+      setReason("");
+      onApplied();
+    },
+    onError: (error) => toast.error("Playbook failed", messageFromError(error)),
+  });
+
+  if (!canWrite) return null;
+
+  const toggle = (id: PlaybookActionId) =>
+    setSelected((prev) => (prev.includes(id) ? prev.filter((value) => value !== id) : [...prev, id]));
+
+  return (
+    <Panel className="p-4">
+      <div className="mb-3 flex items-center gap-2">
+        <Zap size={15} className="text-critical" />
+        <p className="text-xs font-semibold text-ink">Response playbook</p>
+        <span className="text-[10px] text-faint">Automated containment</span>
+      </div>
+      <div className="grid gap-2 sm:grid-cols-2">
+        {(catalog.data?.actions ?? []).map((action) => {
+          const active = selected.includes(action.id);
+          return (
+            <button
+              key={action.id}
+              type="button"
+              onClick={() => toggle(action.id)}
+              className={cn(
+                "rounded-lg border p-2.5 text-left transition",
+                active
+                  ? "border-critical/50 bg-critical/[0.06]"
+                  : "border-line/60 bg-raised/30 hover:border-accent/30",
+              )}
+            >
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-[11px] font-medium text-ink">{action.label}</span>
+                <Badge tone={active ? "critical" : "low"}>{action.severity}</Badge>
+              </div>
+              <p className="mt-1 text-[10px] leading-4 text-faint">{action.description}</p>
+            </button>
+          );
+        })}
+      </div>
+      <Field
+        label="Justification"
+        className="mt-3"
+        hint="Recorded in the append-only audit chain and the incident timeline."
+      >
+        <TextArea
+          rows={2}
+          value={reason}
+          onChange={(event) => setReason(event.target.value)}
+          placeholder="Why is containment required for this identity?"
+        />
+      </Field>
+      {run.data && (
+        <div className="mt-3 space-y-1.5 rounded-lg border border-line/60 bg-raised/30 p-3">
+          {run.data.outcomes.map((outcome) => (
+            <div key={outcome.action} className="flex items-center justify-between gap-2 text-[11px]">
+              <span className="text-muted">{outcome.label}</span>
+              <span
+                className={cn(
+                  "font-medium",
+                  outcome.status === "APPLIED" && "text-low",
+                  outcome.status === "FAILED" && "text-critical",
+                  outcome.status === "SKIPPED" && "text-faint",
+                )}
+              >
+                {outcome.status}
+              </span>
+            </div>
+          ))}
+        </div>
+      )}
+      {run.isError && (
+        <p className="mt-2 text-[11px] text-critical">{messageFromError(run.error)}</p>
+      )}
+      <div className="mt-3 flex justify-end">
+        <Button
+          variant="solid"
+          size="sm"
+          loading={run.isPending}
+          disabled={selected.length === 0 || reason.trim().length < 3}
+          onClick={() => run.mutate()}
+        >
+          <Zap size={12} /> Execute{selected.length > 0 ? ` (${selected.length})` : ""}
+        </Button>
+      </div>
+    </Panel>
   );
 }
