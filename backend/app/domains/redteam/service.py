@@ -141,7 +141,7 @@ def _attacks_for(scenario_id, db, auth):
             attacks.append(a)
     elif scenario_id == "brute_force":
         if emp and res_finance and emp_dev:
-            a = _run_one(db, auth, emp, res_finance, emp_dev, "READ", _features(failed_logins_15m=80))
+            a = _run_one(db, auth, emp, res_finance, emp_dev, "READ", _features(failed_logins_15m=80, new_device=True, geo_novelty=True, login_hour=3, activity_deviation=0.95))
             a.name = "80 failed logins in 15 minutes"
             attacks.append(a)
     elif scenario_id == "session_hijack":
@@ -151,7 +151,7 @@ def _attacks_for(scenario_id, db, auth):
             attacks.append(a)
     elif scenario_id == "insider_exfiltration":
         if emp and res_hr and emp_dev:
-            a = _run_one(db, auth, emp, res_hr, emp_dev, "READ", _features(sensitive_access_ratio=0.95, distinct_resources_1h=30, requests_1h=120))
+            a = _run_one(db, auth, emp, res_hr, emp_dev, "READ", _features(sensitive_access_ratio=0.99, distinct_resources_1h=40, requests_1h=200, new_device=True, geo_novelty=True, login_hour=1, activity_deviation=0.99, failed_logins_15m=8))
             a.name = "Mass sensitive data access"
             attacks.append(a)
     return attacks
