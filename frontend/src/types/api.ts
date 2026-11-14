@@ -520,6 +520,66 @@ export interface ComplianceReport {
   summary: { total: number; passed: number; failed: number; pass_rate: number };
 }
 
+export interface LeakFinding {
+  id: string;
+  identity_id: string | null;
+  identity_name: string | null;
+  source_type: string;
+  source_name: string;
+  severity: string;
+  matched_field: string;
+  leaked_value_masked: string;
+  first_seen: string;
+  last_seen: string;
+  status: string;
+  remediation: string;
+  is_simulated: boolean;
+}
+
+export interface ThreatIntelSummary {
+  total: number;
+  new: number;
+  triaged: number;
+  resolved: number;
+  critical: number;
+  high: number;
+}
+
+export interface RedTeamAttack {
+  name: string;
+  identity_email: string;
+  resource_name: string;
+  requested_action: string;
+  decision: string;
+  risk_score: number;
+  risk_category: string;
+  blocked: boolean;
+  explanation: string;
+  confidence: number;
+}
+
+export interface RedTeamScenario {
+  id: string;
+  name: string;
+  description: string;
+  severity: string;
+}
+
+export interface RedTeamScenarioResult {
+  scenario: RedTeamScenario;
+  attacks: RedTeamAttack[];
+  blocked_count: number;
+  total_count: number;
+  defended: boolean;
+}
+
+export interface RedTeamRunOut {
+  results: RedTeamScenarioResult[];
+  total_attacks: number;
+  blocked_attacks: number;
+  overall: string;
+}
+
 export interface DeviceEnrollPayload {
   identity_id: string;
   name: string;
