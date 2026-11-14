@@ -42,6 +42,7 @@ from app.domains.access.schemas import (
 )
 from app.domains.events.service import record_event
 from app.domains.incidents.service import create_or_escalate_for_decision
+from app.domains.access.narrator import confidence_score, narrate_decision
 from app.domains.policies.engine import PolicyDecision, evaluate_policy
 from app.security.sessions import revoke_identity_sessions
 
@@ -157,6 +158,27 @@ def evaluate_access_request(
         {"step": "ml_anomaly", "status": request_row.risk_category.lower(), "detail": f"Risk {request_row.risk_score:.1f} / Anom {request_row.anomaly_score:.4f}"},
         {"step": "final_decision", "status": request_row.decision.lower(), "detail": f"{request_row.decision} - policy overrides AI"},
     ]
+    explanation = narrate_decision(
+        subject_name=subject.display_name,
+        subject_role=subject.role,
+        resource_name=resource.name,
+        resource_sensitivity=resource.sensitivity,
+        requested_action=request_row.requested_action,
+        decision=request_row.decision,
+        risk_score=request_row.risk_score,
+        risk_category=request_row.risk_category,
+        reasons=request_row.reasons or [],
+        policy_version=request_row.policy_version,
+        repeated_anomalies=outcome.repeated_anomalies,
+        device_state=device.state if device else None,
+        device_owner_mismatch=bool(device and device.identity_id != subject.id),
+    )
+    conf = confidence_score(
+        decision=request_row.decision,
+        risk_score=request_row.risk_score,
+        reasons=request_row.reasons or [],
+        repeated_anomalies=outcome.repeated_anomalies,
+    )
     return DecisionOut(
         request_id=request_row.id,
         identity_id=request_row.identity_id,
@@ -173,6 +195,8 @@ def evaluate_access_request(
         correlation_id=request_row.correlation_id,
         is_simulated=request_row.is_simulated,
         policy_trace=trace,
+        explanation=explanation,
+        confidence=conf,
     )
 
 

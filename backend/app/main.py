@@ -168,6 +168,8 @@ def create_app() -> FastAPI:
 
         @application.get("/{full_path:path}", include_in_schema=False)
         async def _spa_fallback(full_path: str):
+            if full_path.startswith("api/") or full_path == "api":
+                return JSONResponse(status_code=404, content={"detail": "Not Found"})
             target = _frontend_dist / full_path
             if target.is_file():
                 return FileResponse(str(target))

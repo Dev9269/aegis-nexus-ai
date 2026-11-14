@@ -33,6 +33,7 @@ import type {
   SettingsInfo,
   ScenarioId,
   DeviceState,
+  ComplianceReport,
 } from "../types/api";
 
 import { buildQuery, download, request } from "../lib/http";
@@ -118,6 +119,7 @@ export const api = {
 
   modelEvaluation: () => request<ModelEvaluation>("/model/evaluation"),
   modelFeatures: () => request<FeatureMetadata[]>("/model/features"),
+  complianceReport: (framework?: string) => request<ComplianceReport>(`/compliance/report${buildQuery({ framework })}`),
   retrainModel: (seed: number, rows: number) =>
     request<ModelEvaluation>(`/model/retrain${buildQuery({ seed, rows })}`, {
       method: "POST",

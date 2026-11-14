@@ -19,6 +19,7 @@ const DevicesPage = lazy(() => import("../pages/DevicesPage"));
 const PoliciesPage = lazy(() => import("../pages/PoliciesPage"));
 const ModelPage = lazy(() => import("../pages/ModelPage"));
 const AuditPage = lazy(() => import("../pages/AuditPage"));
+const CompliancePage = lazy(() => import("../pages/CompliancePage"));
 const DemoPage = lazy(() => import("../features/demo/pages/DemoPage"));
 const SettingsPage = lazy(() => import("../features/settings/pages/SettingsPage"));
 const NotFoundPage = lazy(() => import("../pages/NotFoundPage"));
@@ -88,6 +89,7 @@ export function AppRouter() {
             <Route path="/policies" element={<PoliciesPage />} />
             <Route path="/model" element={<ModelPage />} />
             <Route path="/audit" element={<AuditPage />} />
+            <Route path="/compliance" element={<CompliancePage />} />
             <Route path="/demos" element={<DemoPage />} />
             <Route path="/settings" element={<SettingsPage />} />
           </Route>
