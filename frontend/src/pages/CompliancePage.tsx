@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { CheckCircle2, ClipboardCheck, Shield, XCircle } from "lucide-react";
 import { api } from "../services/api";
@@ -87,7 +87,7 @@ export default function CompliancePage() {
                     )}
                     <div>
                       <p className="text-xs font-semibold text-ink">
-                        {control.control_id} � {control.name}
+                        {control.control_id} — {control.name}
                       </p>
                       <p className="mt-1 text-[10px] leading-4 text-faint">{control.evidence}</p>
                     </div>
