@@ -65,6 +65,7 @@ EXPECTED = {
     },
     "/api/demo/run": {"post": "run_all_demo_scenarios_api_demo_run_post"},
     "/api/demo/reset": {"post": "reset_demo_api_demo_reset_post"},
+    "/api/compliance/report": {"get": "compliance_report_api_compliance_report_get"},
 }
 
 

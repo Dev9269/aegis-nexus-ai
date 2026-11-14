@@ -742,6 +742,18 @@ function DecisionResultView({ result }: { result: DecisionResult }) {
         </div>
       </div>
 
+      {result.explanation && (
+        <div className="rounded-xl border border-accent/20 bg-accent/[0.04] p-4">
+          <div className="flex items-center justify-between gap-2">
+            <p className="eyebrow">Explainable AI decision narrative</p>
+            {result.confidence !== undefined && (
+              <Badge tone="accent">Confidence {(result.confidence * 100).toFixed(0)}%</Badge>
+            )}
+          </div>
+          <p className="mt-2 text-[11px] leading-5 text-ink">{result.explanation}</p>
+        </div>
+      )}
+
       <div>
         <p className="eyebrow mb-2">Policy reasons</p>
         <div className="space-y-2">

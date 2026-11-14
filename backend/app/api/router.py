@@ -4,6 +4,7 @@ from fastapi import APIRouter
 
 from app.domains.access.router import router as access_router
 from app.domains.audit.router import router as audit_router
+from app.domains.compliance.router import router as compliance_router
 from app.domains.auth.router import router as auth_router
 from app.domains.demo.router import router as demo_router
 from app.domains.devices.router import router as devices_router
@@ -28,6 +29,7 @@ for child in (
     overview_router,
     model_router,
     audit_router,
+    compliance_router,
     demo_router,
 ):
     router.include_router(child, prefix="/api")

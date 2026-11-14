@@ -500,6 +500,24 @@ export interface DecisionResult {
   correlation_id: string;
   is_simulated: boolean;
   policy_trace?: PolicyTraceStep[];
+  explanation?: string;
+  confidence?: number;
+}
+
+export interface ComplianceControl {
+  control_id: string;
+  name: string;
+  status: string;
+  evidence: string;
+  last_verified: string | null;
+}
+
+export interface ComplianceReport {
+  framework: string;
+  generated_at: string;
+  overall_status: string;
+  controls: ComplianceControl[];
+  summary: { total: number; passed: number; failed: number; pass_rate: number };
 }
 
 export interface DeviceEnrollPayload {

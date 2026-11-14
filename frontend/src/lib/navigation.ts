@@ -1,6 +1,7 @@
 import {
   Activity,
   BookLock,
+  ClipboardCheck,
   Boxes,
   Fingerprint,
   Home,
@@ -111,6 +112,14 @@ export const NAV_ITEMS: NavItem[] = [
     label: "Audit ledger",
     description: "Append-only hash-chain evidence",
     icon: BookLock,
+    group: "Assurance",
+    roles: ["SECURITY_ADMIN", "SECURITY_ANALYST", "AUDITOR"],
+  },
+  {
+    to: "/compliance",
+    label: "Compliance",
+    description: "SOC2/GDPR/HIPAA control evidence",
+    icon: ClipboardCheck,
     group: "Assurance",
     roles: ["SECURITY_ADMIN", "SECURITY_ANALYST", "AUDITOR"],
   },

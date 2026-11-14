@@ -85,3 +85,5 @@ class DecisionOut(BaseModel):
     correlation_id: str
     is_simulated: bool
     policy_trace: list[dict[str, Any]] = Field(default_factory=list)
+    explanation: str = ""
+    confidence: float = 0.0
