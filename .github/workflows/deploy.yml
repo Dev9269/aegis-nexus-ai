@@ -11,6 +11,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: superfly/flyctl-actions/setup-flyctl@master
+      # Sessions and app state live in a per-machine SQLite file with no shared
+      # store, so multiple machines cannot see each other's sessions (requests
+      # bounce between 200/401). Pin the app to a single machine.
+      - name: Pin to a single machine
+        run: flyctl scale count 1 --yes
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
       - run: flyctl deploy --remote-only
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
