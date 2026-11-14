@@ -10,6 +10,7 @@ from app.core.config.database import DatabaseFields
 from app.core.config.limits import LimitFields
 from app.core.config.model import ModelFields
 from app.core.config.runtime import RuntimeFields
+from app.core.config.security import EncryptionFields
 
 
 class Settings(
@@ -19,6 +20,7 @@ class Settings(
     BootstrapFields,
     ModelFields,
     LimitFields,
+    EncryptionFields,
     BaseSettings,
 ):
     model_config = SettingsConfigDict(

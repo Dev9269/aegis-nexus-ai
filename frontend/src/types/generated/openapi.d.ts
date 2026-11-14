@@ -771,6 +771,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/security/authentication": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Authentication Posture */
+        get: operations["authentication_posture_api_security_authentication_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/security/encryption": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Encryption Posture */
+        get: operations["encryption_posture_api_security_encryption_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/settings/info": {
         parameters: {
             query?: never;
@@ -960,6 +994,15 @@ export interface components {
             /** Risk Score */
             risk_score: number;
         };
+        /** AuditChainPosture */
+        AuditChainPosture: {
+            /** Message */
+            message: string;
+            /** Records */
+            records: number;
+            /** Verified */
+            verified: boolean;
+        };
         /** AuditOut */
         AuditOut: {
             /** Action */
@@ -1006,6 +1049,37 @@ export interface components {
             message: string;
             /** Valid */
             valid: boolean;
+        };
+        /** AuthenticationPosture */
+        AuthenticationPosture: {
+            audit_chain: components["schemas"]["AuditChainPosture"];
+            authorization: components["schemas"]["AuthorizationPosture"];
+            cookies: components["schemas"]["CookiePosture"];
+            csrf: components["schemas"]["CsrfPosture"];
+            login_rate_limit: components["schemas"]["RateLimitPosture"];
+            password_hashing: components["schemas"]["PasswordHashingPosture"];
+            session_tokens: components["schemas"]["SessionTokenPosture"];
+        };
+        /** AuthorizationPosture */
+        AuthorizationPosture: {
+            /** Mode */
+            mode: string;
+            probe: components["schemas"]["AuthorizationProbe"];
+            /** Roles */
+            roles: string[];
+            /** Staff Only Routes */
+            staff_only_routes: string[];
+        };
+        /** AuthorizationProbe */
+        AuthorizationProbe: {
+            /** Employee Role Status */
+            employee_role_status: number;
+            /** Enforced */
+            enforced: boolean;
+            /** No Session Status */
+            no_session_status: number;
+            /** Staff Role Status */
+            staff_role_status: number;
         };
         /** BehaviorFeatures */
         BehaviorFeatures: {
@@ -1091,6 +1165,17 @@ export interface components {
             /** True Positive */
             true_positive: number;
         };
+        /** CookiePosture */
+        CookiePosture: {
+            /** Csrf Cookie Httponly */
+            csrf_cookie_httponly: boolean;
+            /** Samesite */
+            samesite: string;
+            /** Session Cookie Httponly */
+            session_cookie_httponly: boolean;
+            /** Session Cookie Secure */
+            session_cookie_secure: boolean;
+        };
         /** CopilotAnswer */
         CopilotAnswer: {
             /** Answer */
@@ -1117,6 +1202,13 @@ export interface components {
         CopilotQuestion: {
             /** Question */
             question: string;
+        };
+        /** CsrfPosture */
+        CsrfPosture: {
+            /** Enabled */
+            enabled: boolean;
+            /** Mode */
+            mode: string;
         };
         /** DecisionOut */
         DecisionOut: {
@@ -1310,6 +1402,41 @@ export interface components {
              * @enum {string}
              */
             state: "TRUSTED" | "UNVERIFIED" | "RESTRICTED" | "REVOKED";
+        };
+        /** EncryptionPosture */
+        EncryptionPosture: {
+            /** Algorithm */
+            algorithm: string;
+            /** At Rest */
+            at_rest: string;
+            /** Encrypted Fields */
+            encrypted_fields: string[];
+            /** Encrypted Record Count */
+            encrypted_record_count: number;
+            /** In Transit */
+            in_transit: string;
+            /** Key Source */
+            key_source: string;
+            /** Key Version */
+            key_version: string;
+            /** Plaintext Leaks */
+            plaintext_leaks: number;
+            sample?: components["schemas"]["EncryptionSample"] | null;
+            /** Secrets */
+            secrets: string;
+        };
+        /** EncryptionSample */
+        EncryptionSample: {
+            /** Decrypted Value */
+            decrypted_value: string;
+            /** Field */
+            field: string;
+            /** Record Id */
+            record_id: string;
+            /** Stored Ciphertext */
+            stored_ciphertext: string;
+            /** Table */
+            table: string;
         };
         /** EvaluateAccessIn */
         EvaluateAccessIn: {
@@ -1832,6 +1959,19 @@ export interface components {
             /** Total */
             total: number;
         };
+        /** PasswordHashingPosture */
+        PasswordHashingPosture: {
+            /** Algorithm */
+            algorithm: string;
+            /** Parameters */
+            parameters: {
+                [key: string]: number;
+            };
+            /** Plaintext Passwords Stored */
+            plaintext_passwords_stored: number;
+            /** Sample Hash Prefix */
+            sample_hash_prefix: string | null;
+        };
         /** PlaybookActionInfo */
         PlaybookActionInfo: {
             /** Description */
@@ -2022,6 +2162,13 @@ export interface components {
             /** Session Max Minutes */
             session_max_minutes: number;
         };
+        /** RateLimitPosture */
+        RateLimitPosture: {
+            /** Limit */
+            limit: number;
+            /** Window Seconds */
+            window_seconds: number;
+        };
         /** RedTeamAttack */
         RedTeamAttack: {
             /** Blocked */
@@ -2205,6 +2352,19 @@ export interface components {
             is_simulated: boolean;
             /** User Agent */
             user_agent: string | null;
+        };
+        /** SessionTokenPosture */
+        SessionTokenPosture: {
+            /** Active Sessions */
+            active_sessions: number;
+            /** Raw Tokens Stored */
+            raw_tokens_stored: number;
+            /** Revoked Sessions */
+            revoked_sessions: number;
+            /** Sample Token Hash */
+            sample_token_hash: string | null;
+            /** Storage */
+            storage: string;
         };
         /** SettingsInfoOut */
         SettingsInfoOut: {
@@ -3637,6 +3797,46 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["PlaybookCatalog"];
+                };
+            };
+        };
+    };
+    authentication_posture_api_security_authentication_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuthenticationPosture"];
+                };
+            };
+        };
+    };
+    encryption_posture_api_security_encryption_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EncryptionPosture"];
                 };
             };
         };

@@ -96,6 +96,7 @@ Copy `.env.example` to `.env` at the repository root. Backend settings use the `
 | `AEGIS_DEMO_PASSWORD` | `ChangeMe-Demo!2026` | Seeded demo password |
 | `AEGIS_SESSION_TTL_MINUTES` | `60` | Session lifetime |
 | `AEGIS_COOKIE_SECURE` | `false` | Set `true` behind HTTPS |
+| `AEGIS_ENCRYPTION_KEY` | unset (dev default) | Base64 32-byte AES-256 key for encryption at rest; required outside development |
 | `AEGIS_AUTO_CREATE_TABLES` | `true` | Create tables at startup |
 | `AEGIS_MODEL_ARTIFACT_DIR` | `ml/artifacts` | Model artifact directory |
 | `AEGIS_LOGIN_RATE_LIMIT` | `8` | Attempts per window per IP+email |
@@ -105,7 +106,7 @@ Copy `.env.example` to `.env` at the repository root. Backend settings use the `
 | `AEGIS_BOOTSTRAP_ADMIN_PASSWORD` | unset | Bootstrap admin password; minimum 12 characters |
 | `AEGIS_BOOTSTRAP_ADMIN_NAME` | `Bootstrap Admin` | Bootstrap admin display name |
 
-Production/staging startup fails closed if demo mode is enabled, cookies are not secure, or CORS contains `*`. Demo seeding is refused whenever `AEGIS_DEMO_MODE=false`; use `python -m scripts.bootstrap` to create the first administrator instead.
+Production/staging startup fails closed if demo mode is enabled, cookies are not secure, CORS contains `*`, or `AEGIS_ENCRYPTION_KEY` is unset. Demo seeding is refused whenever `AEGIS_DEMO_MODE=false`; use `python -m scripts.bootstrap` to create the first administrator instead.
 
 Frontend variables: `VITE_API_BASE=/api`, `VITE_WS_PATH=/api/ws/events`. Demo credentials are bundled only in development, or when `VITE_DEMO_MODE=true` is explicitly set. Production builds run a secret scan and fail if the demo password is present.
 
@@ -186,11 +187,14 @@ PostgreSQL data and model artifacts persist in named volumes. The Docker path re
 - [ML methodology](docs/ML_METHODOLOGY.md)
 - [API reference](docs/API.md)
 - [Demo guide](docs/DEMO_GUIDE.md)
+- [Encryption and data protection](docs/ENCRYPTION.md)
 - [Security policy](SECURITY.md)
 
 ## Security model at a glance
 
 - Passwords are hashed with scrypt. Sessions use opaque tokens stored hashed server-side and delivered in HttpOnly cookies.
+- Sensitive investigation fields (leak values/sources/remediation, incident notes, resolutions) are encrypted at rest with AES-256-GCM; the database stores only ciphertext. See [docs/ENCRYPTION.md](docs/ENCRYPTION.md).
+- `GET /api/security/encryption` and `GET /api/security/authentication` expose live, database-backed evidence of the encryption and authentication controls (also shown on the Compliance page).
 - Unsafe methods require a CSRF double-submit token (`aegis_csrf` cookie + `X-CSRF-Token` header).
 - Authorization is enforced server-side with role dependencies; hidden UI controls are not a security boundary.
 - Production/staging refuses demo mode, insecure cookies, and wildcard CORS at startup. Demo accounts cannot be seeded outside demo mode.

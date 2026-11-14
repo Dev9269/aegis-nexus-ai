@@ -520,6 +520,63 @@ export interface ComplianceReport {
   summary: { total: number; passed: number; failed: number; pass_rate: number };
 }
 
+export interface EncryptionSample {
+  table: string;
+  field: string;
+  record_id: string;
+  stored_ciphertext: string;
+  decrypted_value: string;
+}
+
+export interface EncryptionPosture {
+  algorithm: string;
+  key_version: string;
+  key_source: string;
+  in_transit: string;
+  at_rest: string;
+  secrets: string;
+  encrypted_fields: string[];
+  encrypted_record_count: number;
+  plaintext_leaks: number;
+  sample: EncryptionSample | null;
+}
+
+export interface AuthenticationPosture {
+  password_hashing: {
+    algorithm: string;
+    parameters: Record<string, number>;
+    sample_hash_prefix: string | null;
+    plaintext_passwords_stored: number;
+  };
+  session_tokens: {
+    storage: string;
+    sample_token_hash: string | null;
+    active_sessions: number;
+    revoked_sessions: number;
+    raw_tokens_stored: number;
+  };
+  csrf: { enabled: boolean; mode: string };
+  cookies: {
+    session_cookie_httponly: boolean;
+    session_cookie_secure: boolean;
+    samesite: string;
+    csrf_cookie_httponly: boolean;
+  };
+  login_rate_limit: { limit: number; window_seconds: number };
+  authorization: {
+    mode: string;
+    roles: string[];
+    staff_only_routes: string[];
+    probe: {
+      no_session_status: number;
+      employee_role_status: number;
+      staff_role_status: number;
+      enforced: boolean;
+    };
+  };
+  audit_chain: { verified: boolean; records: number; message: string };
+}
+
 export interface LeakFinding {
   id: string;
   identity_id: string | null;

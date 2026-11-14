@@ -117,6 +117,20 @@ Audit rows are append-only in application code. Each row includes:
 
 `record_hash = SHA-256(canonical row fields + prev_hash)`. `GET /api/audit/verify` recomputes the chain and reports the first break. Demo reset preserves the audit ledger and records the reset action.
 
+## Encryption at rest
+
+Sensitive free-text columns are encrypted with AES-256-GCM before they reach the database. A SQLAlchemy `TypeDecorator` (`app/security/crypto.py`) transparently encrypts on write and decrypts on read, so services and the API continue to work with plaintext while the database stores only ciphertext.
+
+- Ciphertext format is `enc:v1:<base64(nonce || ciphertext || GCM tag)>`; the `v1` segment allows key/format rotation. Rows written before encryption was enabled (no prefix) remain readable.
+- The key comes from `AEGIS_ENCRYPTION_KEY` (base64, 32 bytes). Outside development the key is required and startup fails closed without it; development uses a documented, non-secret default so local runs and tests work.
+- Encrypted columns: `leak_findings.leaked_value_masked`, `leak_findings.source_name`, `leak_findings.remediation`, `incident_notes.note`, `incidents.resolution`. Columns used for lookup or filtering (for example `identities.email`) and the append-only audit ledger are intentionally left unencrypted so search and hash-chain verification keep working.
+- `GET /api/security/encryption` reports the posture and reads one stored value directly from the database (bypassing the ORM) to show ciphertext on disk beside the decrypted value. It also reports `plaintext_leaks` (values in encrypted columns that are not ciphertext), which should be `0`.
+- GCM authentication rejects any tampered ciphertext, so an edited database value fails to decrypt rather than returning attacker-controlled plaintext.
+
+## Authentication verification
+
+`GET /api/security/authentication` returns live evidence for the authentication controls rather than a static claim: scrypt parameters and a count of any non-scrypt password hashes; the stored SHA-256 digest of the current session and a count of any raw (unhashed) session tokens; CSRF mode; cookie flags; login rate limit; server-side role enforcement and the staff-only route list; and the live audit-chain verification result. The Compliance page renders this as the "Authentication verification" panel.
+
 ## Realtime path
 
 `/api/ws/events` streams `{type: "security_event", event: {...}}` frames plus heartbeats. Staff authorization is checked at connect and revalidated on incoming frames and every `AEGIS_WS_REVALIDATION_SECONDS`; a revoked session closes with code `4401`. The SPA reconnects with backoff and invalidates relevant TanStack Query caches when a frame arrives. High/critical events also surface as toasts. Polling remains available through normal queries if the socket is unavailable.

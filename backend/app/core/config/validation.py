@@ -12,3 +12,7 @@ def validate_runtime_settings(settings: Settings) -> None:
         raise ValueError("demo mode must be disabled outside development.")
     if "*" in settings.allowed_origin_list:
         raise ValueError("Wildcard CORS origins are not allowed outside development.")
+    if not settings.encryption_key:
+        raise ValueError(
+            "AEGIS_ENCRYPTION_KEY must be set outside development for encryption at rest."
+        )
