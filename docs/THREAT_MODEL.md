@@ -15,6 +15,7 @@ Out of scope for this prototype: real SSO/MFA, real device attestation, endpoint
 - Audit ledger integrity.
 - Incident records and investigation notes.
 - Device trust states and identity status.
+- Encrypted investigation fields (leak values, sources, remediation, incident notes, resolutions).
 
 ## Actors
 
@@ -51,6 +52,7 @@ Out of scope for this prototype: real SSO/MFA, real device attestation, endpoint
 | XSS | Session/CSRF theft and UI manipulation | React escaping, no raw HTML injection, CSP on the production SPA, anti-framing headers | Vite dev server does not enforce the nginx CSP; dependency review is point-in-time |
 | CSV formula injection | Spreadsheet code execution | Exports neutralize leading formula characters | User spreadsheet configuration varies |
 | Sensitive data in logs | Credential/evidence leakage | Login audit stores email/reason only; no passwords or raw tokens; request logs carry method/path/status/request ID without bodies; error envelope hides internals | URLs can still contain resource/access IDs |
+| Data disclosure from a stolen database file or backup | Exposure of investigation detail | Sensitive columns encrypted at rest with AES-256-GCM; key required outside development and never stored in the database; GCM authentication rejects tampered ciphertext | Single application key with no KMS/rotation; an operator holding the key can decrypt |
 | Demo data mistaken for real | Misleading decisions/claims | `is_simulated` tags, model limitations, explicit demo mode, demo seeding refused outside demo mode, production startup rejects demo mode | Operator could misrepresent a demo |
 | Supply-chain compromise | Malicious dependency or build artifact | Pinned lockfile, npm audit, pip-audit, CI gates, production bundle demo-password scan, non-root containers | No SBOM signing or reproducible-build attestation |
 | Device spoofing | False trust signal | Device state is authoritative in the DB and only admins change it | No real attestation; enrollment is a trust ceremony, not proof |
@@ -79,6 +81,10 @@ The anomaly model may score a novel attack as low risk. Policy role, device, act
 
 A local DB administrator can alter rows and recompute hashes. The chain detects accidental or partial tampering, but it is not externally anchored. Production needs write-once storage or external attestation.
 
+### Database file or backup exfiltration
+
+An attacker who copies the database file or a backup obtains ciphertext for sensitive investigation fields. Without `AEGIS_ENCRYPTION_KEY` the leaked values, sources, remediation, notes, and resolutions cannot be read; tampering with ciphertext fails GCM authentication rather than yielding modified plaintext. The audit ledger and lookup columns remain readable by design, so scope the blast radius accordingly.
+
 ## Security invariants to preserve
 
 - The model never returns an authorization grant and never overrides a mandatory denial.
@@ -87,11 +93,13 @@ A local DB administrator can alter rows and recompute hashes. The chain detects 
 - Employees can read only their own identity/access data.
 - Policy publishing creates a new immutable version.
 - Demo reset never deletes audit history.
+- Sensitive investigation fields are stored as ciphertext; the application holds the only key, and tampered ciphertext fails to decrypt.
 
 ## Production hardening backlog
 
 - OIDC/SAML SSO and phishing-resistant MFA.
 - External secret manager and signed model artifacts.
+- External KMS for the field-encryption key, per-tenant keys, and scheduled key rotation.
 - Redis-backed sessions/rate limits and multi-worker WebSocket fan-out.
 - Real EDR/MDM attestation and IP/geo reputation with privacy review.
 - SBOM generation, artifact signing, reproducible builds, and continuous vulnerability monitoring.

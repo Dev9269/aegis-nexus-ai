@@ -34,6 +34,8 @@ import type {
   ScenarioId,
   DeviceState,
   ComplianceReport,
+  EncryptionPosture,
+  AuthenticationPosture,
   LeakFinding,
   RedTeamRunOut,
   RedTeamScenario,
@@ -129,6 +131,8 @@ export const api = {
   modelEvaluation: () => request<ModelEvaluation>("/model/evaluation"),
   modelFeatures: () => request<FeatureMetadata[]>("/model/features"),
   complianceReport: (framework?: string) => request<ComplianceReport>(`/compliance/report${buildQuery({ framework })}`),
+  encryptionPosture: () => request<EncryptionPosture>("/security/encryption"),
+  authenticationPosture: () => request<AuthenticationPosture>("/security/authentication"),
 
   threatIntelFindings: (params?: { status?: string; severity?: string; identity_id?: string }) =>
     request<LeakFinding[]>(`/threat-intel/findings${buildQuery(params ?? {})}`),

@@ -18,6 +18,17 @@ jobs:
         run: flyctl scale count 1 --yes
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+      # Stage the field-encryption key for the next deploy when configured.
+      # Without it the app falls back to the documented development key.
+      - name: Stage encryption key
+        run: |
+          if [ -n "${{ secrets.AEGIS_ENCRYPTION_KEY }}" ]; then
+            flyctl secrets set AEGIS_ENCRYPTION_KEY="${{ secrets.AEGIS_ENCRYPTION_KEY }}" --stage
+          else
+            echo "AEGIS_ENCRYPTION_KEY not set; using the development default."
+          fi
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
       - run: flyctl deploy --remote-only
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}

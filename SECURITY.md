@@ -20,6 +20,7 @@ There is no bug bounty or guaranteed response SLA. Please allow time for triage 
 ## Security model
 
 - Passwords are hashed with scrypt. Sessions use opaque random tokens stored hashed server-side, with HttpOnly/SameSite cookies and configurable TTL.
+- Sensitive investigation fields are encrypted at rest with AES-256-GCM, using a key supplied by `AEGIS_ENCRYPTION_KEY` (base64, 32 bytes; required outside development). Encryption is transparent to services and the API; the database stores only ciphertext.
 - Unsafe requests require a CSRF double-submit token. The check applies whenever either auth cookie is present, and active sessions bind the token to the session secret.
 - Authorization is enforced server-side by role. Employees can read only their own identity and access records.
 - Policy denials are final; the anomaly model may only escalate. The risk index is an anomaly ranking, not an attack probability.
@@ -40,11 +41,12 @@ Before exposing an instance beyond a trusted local machine:
 3. Replace `AEGIS_ALLOWED_ORIGINS` with exact HTTPS origins; never use `*`.
 4. Set a strong, unique `AEGIS_BOOTSTRAP_ADMIN_PASSWORD` (12+ characters) and `AEGIS_BOOTSTRAP_ADMIN_EMAIL`; bootstrap once, then remove the password from the environment.
 5. Replace all database and demo secrets. Never place secrets in `VITE_*` variables; Vite values are public.
-6. Use PostgreSQL with a strong `POSTGRES_PASSWORD`, restrict network access, and test backup/restore.
-7. Train and review a model artifact explicitly. Container startup does not train one.
-8. Require HTTPS for the UI and WebSocket, and keep published ports behind a reverse proxy or private network.
-9. Monitor `/api/health/ready`, structured logs, and audit-chain verification.
-10. Run the backend/frontend verification commands in the [README](README.md), plus dependency audits, before deployment.
+6. Set a stable, secret `AEGIS_ENCRYPTION_KEY` (base64 of 32 random bytes) and keep it in a secret manager; changing or losing it makes existing ciphertext unreadable.
+7. Use PostgreSQL with a strong `POSTGRES_PASSWORD`, restrict network access, and test backup/restore.
+8. Train and review a model artifact explicitly. Container startup does not train one.
+9. Require HTTPS for the UI and WebSocket, and keep published ports behind a reverse proxy or private network.
+10. Monitor `/api/health/ready`, structured logs, and audit-chain verification.
+11. Run the backend/frontend verification commands in the [README](README.md), plus dependency audits, before deployment.
 
 The bundled Docker Compose topology has not been executed in this environment. Validate it on a Docker host, including PostgreSQL, cookies over TLS, migrations, bootstrap, and readiness, before relying on it.
 
@@ -53,6 +55,7 @@ The bundled Docker Compose topology has not been executed in this environment. V
 - No SSO, MFA, SIEM export, external audit anchoring, secrets manager, artifact signing, SBOM, HA, or multi-tenancy.
 - Login rate limiting and WebSocket fan-out are in-process; multi-worker deployments need shared state.
 - A database administrator can rewrite the audit chain and its verification baseline.
+- Field encryption uses one application key from the environment: no KMS, per-tenant keys, or automated rotation, so an operator holding both the database and the key can decrypt fields.
 - Demo data is synthetic and model metrics describe synthetic separation only.
 - Accessibility work covers the command palette and mobile navigation, not a full WCAG audit.
 - Docker/PostgreSQL hardening is configuration-reviewed but unverified locally.

@@ -9,6 +9,7 @@ from sqlalchemy import JSON, Boolean, DateTime, Float, ForeignKey, Integer, Stri
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.database import Base
+from app.security.crypto import EncryptedString
 
 
 def utcnow() -> datetime:
@@ -241,7 +242,7 @@ class Incident(Base):
     assigned_to: Mapped[str | None] = mapped_column(String(36), nullable=True)
     related_access_request_ids: Mapped[list[str]] = mapped_column(JSON, default=list)
     related_device_ids: Mapped[list[str]] = mapped_column(JSON, default=list)
-    resolution: Mapped[str | None] = mapped_column(Text, nullable=True)
+    resolution: Mapped[str | None] = mapped_column(EncryptedString, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, index=True)
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), default=utcnow, onupdate=utcnow
@@ -259,7 +260,7 @@ class IncidentNote(Base):
     incident_id: Mapped[str] = mapped_column(ForeignKey("incidents.id"), nullable=False, index=True)
     author_id: Mapped[str | None] = mapped_column(String(36), nullable=True)
     author_label: Mapped[str] = mapped_column(String(120), nullable=False)
-    note: Mapped[str] = mapped_column(Text, nullable=False)
+    note: Mapped[str] = mapped_column(EncryptedString, nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
 
     incident: Mapped[Incident] = relationship(back_populates="notes")
@@ -311,14 +312,14 @@ class LeakFinding(Base):
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=new_id)
     identity_id: Mapped[str | None] = mapped_column(String(36), nullable=True, index=True)
     source_type: Mapped[str] = mapped_column(String(40), nullable=False, index=True)
-    source_name: Mapped[str] = mapped_column(String(160), nullable=False)
+    source_name: Mapped[str] = mapped_column(EncryptedString, nullable=False)
     severity: Mapped[str] = mapped_column(String(16), default=Severity.MEDIUM.value, index=True)
     matched_field: Mapped[str] = mapped_column(String(60), nullable=False)
-    leaked_value_masked: Mapped[str] = mapped_column(String(120), nullable=False)
+    leaked_value_masked: Mapped[str] = mapped_column(EncryptedString, nullable=False)
     first_seen: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, index=True)
     last_seen: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
     status: Mapped[str] = mapped_column(String(20), default="NEW", index=True)
-    remediation: Mapped[str] = mapped_column(Text, nullable=False, default="")
+    remediation: Mapped[str] = mapped_column(EncryptedString, nullable=False, default="")
     is_simulated: Mapped[bool] = mapped_column(Boolean, default=False, index=True)
 @event.listens_for(AuditLog, "before_update")
 def _prevent_audit_update(mapper: Any, connection: Any, target: AuditLog) -> None:

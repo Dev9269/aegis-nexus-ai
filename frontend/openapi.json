@@ -265,6 +265,29 @@
         "title": "AccessRequestOut",
         "type": "object"
       },
+      "AuditChainPosture": {
+        "properties": {
+          "message": {
+            "title": "Message",
+            "type": "string"
+          },
+          "records": {
+            "title": "Records",
+            "type": "integer"
+          },
+          "verified": {
+            "title": "Verified",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "verified",
+          "records",
+          "message"
+        ],
+        "title": "AuditChainPosture",
+        "type": "object"
+      },
       "AuditOut": {
         "properties": {
           "action": {
@@ -398,6 +421,103 @@
           "message"
         ],
         "title": "AuditVerifyOut",
+        "type": "object"
+      },
+      "AuthenticationPosture": {
+        "properties": {
+          "audit_chain": {
+            "$ref": "#/components/schemas/AuditChainPosture"
+          },
+          "authorization": {
+            "$ref": "#/components/schemas/AuthorizationPosture"
+          },
+          "cookies": {
+            "$ref": "#/components/schemas/CookiePosture"
+          },
+          "csrf": {
+            "$ref": "#/components/schemas/CsrfPosture"
+          },
+          "login_rate_limit": {
+            "$ref": "#/components/schemas/RateLimitPosture"
+          },
+          "password_hashing": {
+            "$ref": "#/components/schemas/PasswordHashingPosture"
+          },
+          "session_tokens": {
+            "$ref": "#/components/schemas/SessionTokenPosture"
+          }
+        },
+        "required": [
+          "password_hashing",
+          "session_tokens",
+          "csrf",
+          "cookies",
+          "login_rate_limit",
+          "authorization",
+          "audit_chain"
+        ],
+        "title": "AuthenticationPosture",
+        "type": "object"
+      },
+      "AuthorizationPosture": {
+        "properties": {
+          "mode": {
+            "title": "Mode",
+            "type": "string"
+          },
+          "probe": {
+            "$ref": "#/components/schemas/AuthorizationProbe"
+          },
+          "roles": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Roles",
+            "type": "array"
+          },
+          "staff_only_routes": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Staff Only Routes",
+            "type": "array"
+          }
+        },
+        "required": [
+          "mode",
+          "roles",
+          "staff_only_routes",
+          "probe"
+        ],
+        "title": "AuthorizationPosture",
+        "type": "object"
+      },
+      "AuthorizationProbe": {
+        "properties": {
+          "employee_role_status": {
+            "title": "Employee Role Status",
+            "type": "integer"
+          },
+          "enforced": {
+            "title": "Enforced",
+            "type": "boolean"
+          },
+          "no_session_status": {
+            "title": "No Session Status",
+            "type": "integer"
+          },
+          "staff_role_status": {
+            "title": "Staff Role Status",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "no_session_status",
+          "employee_role_status",
+          "staff_role_status",
+          "enforced"
+        ],
+        "title": "AuthorizationProbe",
         "type": "object"
       },
       "BehaviorFeatures": {
@@ -626,6 +746,34 @@
         "title": "ConfusionMatrix",
         "type": "object"
       },
+      "CookiePosture": {
+        "properties": {
+          "csrf_cookie_httponly": {
+            "title": "Csrf Cookie Httponly",
+            "type": "boolean"
+          },
+          "samesite": {
+            "title": "Samesite",
+            "type": "string"
+          },
+          "session_cookie_httponly": {
+            "title": "Session Cookie Httponly",
+            "type": "boolean"
+          },
+          "session_cookie_secure": {
+            "title": "Session Cookie Secure",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "session_cookie_httponly",
+          "session_cookie_secure",
+          "samesite",
+          "csrf_cookie_httponly"
+        ],
+        "title": "CookiePosture",
+        "type": "object"
+      },
       "CopilotAnswer": {
         "properties": {
           "answer": {
@@ -689,6 +837,24 @@
           "question"
         ],
         "title": "CopilotQuestion",
+        "type": "object"
+      },
+      "CsrfPosture": {
+        "properties": {
+          "enabled": {
+            "title": "Enabled",
+            "type": "boolean"
+          },
+          "mode": {
+            "title": "Mode",
+            "type": "string"
+          }
+        },
+        "required": [
+          "enabled",
+          "mode"
+        ],
+        "title": "CsrfPosture",
         "type": "object"
       },
       "DecisionOut": {
@@ -1180,6 +1346,105 @@
           "reason"
         ],
         "title": "DeviceStateIn",
+        "type": "object"
+      },
+      "EncryptionPosture": {
+        "properties": {
+          "algorithm": {
+            "title": "Algorithm",
+            "type": "string"
+          },
+          "at_rest": {
+            "title": "At Rest",
+            "type": "string"
+          },
+          "encrypted_fields": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Encrypted Fields",
+            "type": "array"
+          },
+          "encrypted_record_count": {
+            "title": "Encrypted Record Count",
+            "type": "integer"
+          },
+          "in_transit": {
+            "title": "In Transit",
+            "type": "string"
+          },
+          "key_source": {
+            "title": "Key Source",
+            "type": "string"
+          },
+          "key_version": {
+            "title": "Key Version",
+            "type": "string"
+          },
+          "plaintext_leaks": {
+            "title": "Plaintext Leaks",
+            "type": "integer"
+          },
+          "sample": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/EncryptionSample"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "secrets": {
+            "title": "Secrets",
+            "type": "string"
+          }
+        },
+        "required": [
+          "algorithm",
+          "key_version",
+          "key_source",
+          "in_transit",
+          "at_rest",
+          "secrets",
+          "encrypted_fields",
+          "encrypted_record_count",
+          "plaintext_leaks"
+        ],
+        "title": "EncryptionPosture",
+        "type": "object"
+      },
+      "EncryptionSample": {
+        "properties": {
+          "decrypted_value": {
+            "title": "Decrypted Value",
+            "type": "string"
+          },
+          "field": {
+            "title": "Field",
+            "type": "string"
+          },
+          "record_id": {
+            "title": "Record Id",
+            "type": "string"
+          },
+          "stored_ciphertext": {
+            "title": "Stored Ciphertext",
+            "type": "string"
+          },
+          "table": {
+            "title": "Table",
+            "type": "string"
+          }
+        },
+        "required": [
+          "table",
+          "field",
+          "record_id",
+          "stored_ciphertext",
+          "decrypted_value"
+        ],
+        "title": "EncryptionSample",
         "type": "object"
       },
       "EvaluateAccessIn": {
@@ -2636,6 +2901,44 @@
         "title": "Page[SecurityEventOut]",
         "type": "object"
       },
+      "PasswordHashingPosture": {
+        "properties": {
+          "algorithm": {
+            "title": "Algorithm",
+            "type": "string"
+          },
+          "parameters": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "title": "Parameters",
+            "type": "object"
+          },
+          "plaintext_passwords_stored": {
+            "title": "Plaintext Passwords Stored",
+            "type": "integer"
+          },
+          "sample_hash_prefix": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sample Hash Prefix"
+          }
+        },
+        "required": [
+          "algorithm",
+          "parameters",
+          "sample_hash_prefix",
+          "plaintext_passwords_stored"
+        ],
+        "title": "PasswordHashingPosture",
+        "type": "object"
+      },
       "PlaybookActionInfo": {
         "properties": {
           "description": {
@@ -3123,6 +3426,24 @@
           "reason"
         ],
         "title": "PolicyUpdateIn",
+        "type": "object"
+      },
+      "RateLimitPosture": {
+        "properties": {
+          "limit": {
+            "title": "Limit",
+            "type": "integer"
+          },
+          "window_seconds": {
+            "title": "Window Seconds",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "limit",
+          "window_seconds"
+        ],
+        "title": "RateLimitPosture",
         "type": "object"
       },
       "RedTeamAttack": {
@@ -3629,6 +3950,46 @@
           "is_simulated"
         ],
         "title": "SessionOut",
+        "type": "object"
+      },
+      "SessionTokenPosture": {
+        "properties": {
+          "active_sessions": {
+            "title": "Active Sessions",
+            "type": "integer"
+          },
+          "raw_tokens_stored": {
+            "title": "Raw Tokens Stored",
+            "type": "integer"
+          },
+          "revoked_sessions": {
+            "title": "Revoked Sessions",
+            "type": "integer"
+          },
+          "sample_token_hash": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sample Token Hash"
+          },
+          "storage": {
+            "title": "Storage",
+            "type": "string"
+          }
+        },
+        "required": [
+          "storage",
+          "sample_token_hash",
+          "active_sessions",
+          "revoked_sessions",
+          "raw_tokens_stored"
+        ],
+        "title": "SessionTokenPosture",
         "type": "object"
       },
       "SettingsInfoOut": {
@@ -6429,6 +6790,48 @@
         "summary": "List Playbooks",
         "tags": [
           "response"
+        ]
+      }
+    },
+    "/api/security/authentication": {
+      "get": {
+        "operationId": "authentication_posture_api_security_authentication_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthenticationPosture"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Authentication Posture",
+        "tags": [
+          "security"
+        ]
+      }
+    },
+    "/api/security/encryption": {
+      "get": {
+        "operationId": "encryption_posture_api_security_encryption_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EncryptionPosture"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Encryption Posture",
+        "tags": [
+          "security"
         ]
       }
     },

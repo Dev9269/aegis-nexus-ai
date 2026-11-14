@@ -18,6 +18,7 @@ from app.domains.policies.router import router as policies_router
 from app.domains.redteam.router import router as redteam_router
 from app.domains.reports.router import router as reports_router
 from app.domains.response.router import router as response_router
+from app.domains.security.router import router as security_router
 from app.domains.system.router import router as system_router
 from app.domains.threatintel.router import router as threatintel_router
 
@@ -38,6 +39,7 @@ for child in (
     redteam_router,
     threatintel_router,
     response_router,
+    security_router,
     copilot_router,
     reports_router,
     demo_router,
