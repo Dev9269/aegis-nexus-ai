@@ -9,7 +9,7 @@ export const DEMO_PASSWORD =
   (import.meta.env.DEV && DEMO_ENABLED ? "ChangeMe-Demo!2026" : "");
 
 export const DEMO_ACCOUNTS = [
-  { email: "admin@aegisnexus.ai", label: "Avery Cole", role: "Security admin" },
+  { email: "admin@aegisnexus.ai", label: "dev9269", role: "Security admin" },
   { email: "analyst@aegisnexus.ai", label: "Jordan Reyes", role: "Security analyst" },
   { email: "auditor@aegisnexus.ai", label: "Priya Nair", role: "Auditor \uFFFD read only" },
   { email: "maya.chen@aegisnexus.ai", label: "Maya Chen", role: "Employee \uFFFD Finance" },

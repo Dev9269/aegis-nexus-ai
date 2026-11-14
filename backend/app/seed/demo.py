@@ -112,7 +112,7 @@ RESOURCE_DEFINITIONS = [
 ]
 
 IDENTITY_DEFINITIONS = [
-    ("Avery Cole", "admin@aegisnexus.ai", Role.SECURITY_ADMIN, "Security", "Security Administrator", "ACTIVE"),
+    ("dev9269", "admin@aegisnexus.ai", Role.SECURITY_ADMIN, "Security", "Security Administrator", "ACTIVE"),
     ("Jordan Reyes", "analyst@aegisnexus.ai", Role.SECURITY_ANALYST, "Security", "Threat Analyst", "ACTIVE"),
     ("Priya Nair", "auditor@aegisnexus.ai", Role.AUDITOR, "Compliance", "Read-only Auditor", "ACTIVE"),
     ("Maya Chen", "maya.chen@aegisnexus.ai", Role.EMPLOYEE, "Finance", "Finance Analyst", "ACTIVE"),
@@ -127,7 +127,7 @@ IDENTITY_DEFINITIONS = [
 ]
 
 DEVICE_DEFINITIONS = [
-    ("admin@aegisnexus.ai", "Avery-MacBook-Pro", "Laptop", "macOS 15.2", "TRUSTED"),
+    ("admin@aegisnexus.ai", "dev9269-MacBook-Pro", "Laptop", "macOS 15.2", "TRUSTED"),
     ("analyst@aegisnexus.ai", "Jordan-ThinkPad-X1", "Laptop", "Windows 11 Pro", "TRUSTED"),
     ("auditor@aegisnexus.ai", "Priya-Surface-Laptop", "Laptop", "Windows 11 Enterprise", "TRUSTED"),
     ("maya.chen@aegisnexus.ai", "Maya-MacBook-Air", "Laptop", "macOS 15.1", "TRUSTED"),

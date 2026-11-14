@@ -13,7 +13,7 @@ test("security admin lands on the live command center", async ({ page }) => {
   await login(page, "admin@aegisnexus.ai");
 
   await expect(page).toHaveURL("http://127.0.0.1:5173/");
-  await expect(page.getByRole("heading", { name: /Good (morning|afternoon|evening), Avery/ })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /Good (morning|afternoon|evening), dev9269/ })).toBeVisible();
   await expect(page.getByRole("navigation").getByRole("link", { name: "Access decisions" })).toBeVisible();
   await expect(page.getByText("API operational")).toBeVisible();
   await expect(page.getByText(/ML ranks anomalies; policy makes the decision/i)).toBeVisible();
