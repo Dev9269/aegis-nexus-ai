@@ -7,6 +7,7 @@ from sqlalchemy import text
 
 from app.db.models import LeakFinding
 from app.security import crypto
+from app.security.backfill import encrypt_existing_rows
 
 
 def test_encrypt_decrypt_round_trip():
@@ -69,3 +70,57 @@ def test_leak_finding_stored_as_ciphertext(db):
     assert loaded.source_name == "Pastebin (public paste)"
     assert loaded.leaked_value_masked == "ab****yz"
     assert loaded.remediation == "Rotate credentials immediately."
+
+
+def test_backfill_encrypts_legacy_plaintext_rows(db):
+    legacy = LeakFinding(
+        source_type="PASTE_SITE",
+        source_name="Legacy Source",
+        matched_field="email",
+        leaked_value_masked="ab****yz",
+        remediation="Rotate credentials.",
+    )
+    already = LeakFinding(
+        source_type="PASTE_SITE",
+        source_name="Already Encrypted",
+        matched_field="email",
+        leaked_value_masked="cd****wx",
+        remediation="Rotate credentials.",
+    )
+    db.add_all([legacy, already])
+    db.commit()
+
+    db.execute(
+        text(
+            "UPDATE leak_findings SET source_name = :value, leaked_value_masked = :value, "
+            "remediation = :value WHERE id = :id"
+        ),
+        {"value": "legacy-plaintext", "id": legacy.id},
+    )
+    db.commit()
+
+    pre_existing = db.execute(
+        text("SELECT source_name FROM leak_findings WHERE id = :id"), {"id": already.id}
+    ).scalar_one()
+    assert pre_existing.startswith(crypto.CIPHER_PREFIX)
+
+    updated = encrypt_existing_rows(db)
+    assert updated == 3
+
+    migrated = db.execute(
+        text(
+            "SELECT source_name, leaked_value_masked, remediation FROM leak_findings "
+            "WHERE id = :id"
+        ),
+        {"id": legacy.id},
+    ).one()
+    for value in migrated:
+        assert value.startswith(crypto.CIPHER_PREFIX)
+        assert crypto.decrypt_value(value) == "legacy-plaintext"
+
+    untouched = db.execute(
+        text("SELECT source_name FROM leak_findings WHERE id = :id"), {"id": already.id}
+    ).scalar_one()
+    assert untouched == pre_existing
+
+    assert encrypt_existing_rows(db) == 0

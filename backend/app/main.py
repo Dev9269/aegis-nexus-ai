@@ -38,6 +38,14 @@ async def lifespan(app: FastAPI):
     validate_runtime_settings(settings)
     if settings.auto_create_tables:
         init_db()
+    from app.core.database import SessionLocal
+    from app.security.backfill import encrypt_existing_rows
+
+    try:
+        with SessionLocal() as db:
+            encrypt_existing_rows(db)
+    except Exception:  # pragma: no cover - best-effort migration of legacy rows
+        logger.warning("encryption_backfill_failed", exc_info=True)
     realtime.bind_loop(asyncio.get_running_loop())
     yield
 
